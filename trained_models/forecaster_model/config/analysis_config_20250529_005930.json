@@ -1,0 +1,44 @@
+{
+  "selected_features": [
+    "sensor_11",
+    "sensor_4",
+    "sensor_17",
+    "sensor_3",
+    "sensor_9",
+    "sensor_14",
+    "sensor_2",
+    "sensor_13",
+    "sensor_15",
+    "sensor_8"
+  ],
+  "sequence_length": 30,
+  "n_features": 10,
+  "feature_scores": {
+    "sensor_2": 0.16212911451300782,
+    "sensor_3": 0.29140185778580124,
+    "sensor_4": 0.41870169821294956,
+    "sensor_6": 0.0667944359622978,
+    "sensor_7": 0.018856375158928,
+    "sensor_8": 0.0790615642207854,
+    "sensor_9": 0.2527684161495396,
+    "sensor_11": 0.462892723078219,
+    "sensor_12": 0.018133416589923415,
+    "sensor_13": 0.15970784944071678,
+    "sensor_14": 0.21070364539963096,
+    "sensor_15": 0.10744266876251599,
+    "sensor_17": 0.3108020817573973,
+    "sensor_20": 0.06690557995951205,
+    "sensor_21": 0.06321403573175643,
+    "sensor_1": 0,
+    "sensor_5": 0,
+    "sensor_10": 0,
+    "sensor_16": 0,
+    "sensor_18": 0
+  },
+  "timestamp": "2025-05-29T00:59:30.503726",
+  "data_summary": {
+    "total_samples": 160359,
+    "total_units": 260,
+    "operational_modes": 3
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "calculate_rul": true,
+  "normalize": true,
+  "drop_sensors": [
+    1,
+    5,
+    10,
+    16,
+    18,
+    19
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "dataset_id": "FD001",
+  "sequence_length": 30,
+  "sensors_to_drop": [
+    1,
+    5,
+    10,
+    16,
+    18,
+    19
+  ],
+  "epochs": 30,
+  "timestamp": "2025-05-28T23:49:13.903324",
+  "input_shape": [
+    30,
+    19
+  ],
+  "encoding_dim": 16
+}
