@@ -1,0 +1,10 @@
+{
+  "total_samples": 30512,
+  "anomalies_detected": 1536,
+  "anomaly_rate": 5.0340849501835345,
+  "method_comparison": {
+    "mse": 1526,
+    "mae": 1526,
+    "max": 1526
+  }
+}
