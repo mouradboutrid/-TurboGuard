@@ -3,8 +3,8 @@ import pickle
 import json
 from datetime import datetime
 from tensorflow.keras.models import load_model
-from LSTMAutoencoder import LSTMAutoencoder  
-from DataPreprocessor import DataPreprocessor 
+from src.LSTM_Autoencoder.lstm_autoencoder import LSTMAutoencoder  
+from src.LSTM_Autoencoder.data import DataPreprocessor 
 
 
 class ModelManager:
