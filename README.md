@@ -64,44 +64,44 @@ graph TD
 
 ```
 TurboGuard/
-├── app/                                    # 🖥️ Streamlit Applications
-│   ├── analyzer_app.py                     # Main anomaly analysis dashboard
-│   ├── app.py                             # Primary application entry point
-│   ├── autoencoder_anomaly_detector_app.py # AutoEncoder-specific UI
-│   ├── forecaster_anomaly_predictor_app.py # Forecasting model UI
-│   ├── loader_app.py                      # Data loading interface
-│   └── preprocessor_app.py                # Data preprocessing dashboard
-├── data/                                  # 📂 CMAPSS Dataset Files
+├── app/                                  # Streamlit Applications
+│   ├── analyzer_app.py                     
+│   ├── app.py                             
+│   ├── autoencoder_anomaly_detector_app.py 
+│   ├── forecaster_anomaly_predictor_app.py 
+│   ├── loader_app.py                     # Data loading interface
+│   └── preprocessor_app.py                
+├── data/                                 # CMAPSS Dataset Files
 │   ├── RUL_FD00X.txt                     # Remaining Useful Life labels
 │   ├── test_FD00X.txt                    # Test dataset
 │   ├── train_FD00X.txt                   # Training dataset
 │   └── readme.txt                        # Dataset documentation
-├── data_overview/                         # 📊 Data exploration notebooks
-├── results/                              # 📈 Model outputs and metrics
+├── data_overview/                        # Data exploration
+├── results/                              # Model outputs and metrics
 │   ├── autoencoder_/                     # AutoEncoder results
 │   └── forecaster/                       # Forecasting model results
-├── src/                                  # 🔧 Core Implementation
+├── src/                                  # Core Implementation
 │   ├── LSTM_AutoEncoder/                 # AutoEncoder architecture
-│   │   ├── anomaly_analyzer.py           # Anomaly analysis engine
-│   │   ├── anomaly_detector.py           # Detection algorithms
-│   │   ├── data_loader.py               # CMAPSS data ingestion
-│   │   ├── data_preprocessor.py         # Feature engineering pipeline
-│   │   ├── lstm_autoencoder.py          # Core AutoEncoder model
-│   │   ├── model_manager.py             # Model persistence & versioning
-│   │   └── visualizer.py                # Visualization utilities
+│   │   ├── anomaly_analyzer.py           
+│   │   ├── anomaly_detector.py           
+│   │   ├── data_loader.py               
+│   │   ├── data_preprocessor.py         
+│   │   ├── lstm_autoencoder.py          
+│   │   ├── model_manager.py             
+│   │   └── visualizer.py               
 │   ├── Forecasting_LSTM/                # Prognostic forecasting system
-│   │   ├── anomaly_detection_engine.py   # Real-time anomaly detection
-│   │   ├── forecasting_data_processor.py # Time series preprocessing
-│   │   ├── main_training_.py            # Training orchestration
-│   │   ├── prognostic_LSTMModel.py      # Forecasting model architecture
-│   │   ├── prognostic_feature_selector.py # Feature selection algorithms
-│   │   ├── prognostic_health_monitor.py  # Health monitoring system
-│   │   └── prognostic_visualization_suite.py # Advanced visualizations
-│   ├── forecaster_anomaly_predictor_test.py  # Forecasting model testing
-│   └── autoencoder_anomaly_predictor_test.py # AutoEncoder testing
-├── trained_models/                       # 🤖 Saved Model Artifacts
-│   ├── autoencoder_models/              # Trained AutoEncoder weights
-│   └── forecaster_model/                # Trained forecasting models
+│   │   ├── anomaly_detection_engine.py   
+│   │   ├── forecasting_data_processor.py 
+│   │   ├── main_training_.py            
+│   │   ├── prognostic_LSTMModel.py     
+│   │   ├── prognostic_feature_selector.py 
+│   │   ├── prognostic_health_monitor.py 
+│   │   └── prognostic_visualization_suite.py
+│   ├── forecaster_anomaly_predictor_test.py  
+│   └── autoencoder_anomaly_predictor_test.py 
+├── trained_models/                      # Saved Model Artifacts
+│   ├── autoencoder_models/              
+│   └── forecaster_model/                
 ├── requirements.txt                      # Python dependencies
 ├── README.md
 ├── Damage Propagation Modeling.pdf      # Technical documentation
