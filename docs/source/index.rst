@@ -17,7 +17,7 @@ TurboGuard Documentation
    :target: https://opensource.org/licenses/MIT
    :alt: License
 
-A state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines using dual LSTM architectures and the CMAPSS dataset.
+**TurboGuard** is a state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines, built on dual LSTM architectures and powered by the CMAPSS dataset.
 
 .. mermaid::
 
@@ -37,29 +37,36 @@ A state-of-the-art deep learning framework for predictive maintenance and anomal
 Overview
 --------
 
-TurboGuard implements a comprehensive anomaly detection and forecasting system for turbofan engines by leveraging two complementary deep learning approaches:
+TurboGuard implements a comprehensive system for turbofan engine health monitoring through two synergistic LSTM-based methods:
 
-- **LSTM AutoEncoder**: Reconstruction-based anomaly detection through sequence-to-sequence learning
-- **Forecasting LSTM**: Next-step prediction for early fault detection and remaining useful life estimation
+- **LSTM AutoEncoder**: Learns to reconstruct input sequences and flags deviations as anomalies.
+- **Forecasting LSTM**: Predicts future values to detect abnormal trends and estimate Remaining Useful Life (RUL).
 
-The system provides robust, interpretable insights into engine health, enabling proactive maintenance strategies and reducing operational costs.
+The framework enables proactive maintenance, minimizes downtime, and optimizes operational efficiency.
 
 Key Features
 ------------
 
-✨ **Dual Model Architecture**: Combines reconstruction and forecasting approaches for comprehensive anomaly detection
+✨ **Dual Model Architecture**  
+Combines reconstruction-based and forecasting-based methods for more reliable anomaly detection.
 
-🎯 **Interactive Dashboard**: Real-time Streamlit applications for engine health monitoring and visualization
+🎯 **Interactive Dashboard**  
+Real-time visualization and health analytics using Streamlit.
 
-📊 **Multivariate Analysis**: Processes 21 sensor channels with temporal dependencies and inter-correlations
+📊 **Multivariate Sensor Analysis**  
+Processes all 21 sensor channels with full temporal and contextual awareness.
 
-🔧 **Modular Design**: Scalable pipeline supporting both research and production deployment
+🔧 **Modular and Scalable**  
+Designed for both research and production environments with pluggable components.
 
-⚡ **Advanced Preprocessing**: Robust data normalization, sequence generation, and feature selection
+⚡ **Advanced Preprocessing**  
+Supports robust normalization, dynamic sequence generation, and feature selection.
 
-🚨 **Multiple Detection Methods**: LSTM-based reconstruction error and statistical anomaly detection
+🚨 **Multiple Detection Strategies**  
+Uses LSTM reconstruction errors, forecasting deviations, and statistical thresholds.
 
-📈 **Comprehensive Evaluation**: Performance metrics including MSE, MAE, precision-recall, and accuracy
+📈 **Detailed Evaluation Metrics**  
+Includes MSE, MAE, RMSE, F1-score, precision-recall, and anomaly lead-time.
 
 Quick Start
 -----------
@@ -69,31 +76,32 @@ Quick Start
    # Clone the repository
    git clone https://github.com/mouradboutrid/TurboGuard.git
    cd TurboGuard
-   
+
    # Install dependencies
    pip install -r requirements.txt
-   
-   # Launch interactive dashboard
+
+   # Launch the dashboard
    streamlit run app/app.py
 
 .. code-block:: python
 
-   # Basic usage example
+   # Minimal example
    from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
    from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
-   
-   # Load data
+
    loader = CMAPSSDataLoader()
    data = loader.load_dataset('FD001')
-   
-   # Create and train model
+
    model = LSTMAutoEncoder()
    model.build_model(input_shape=(50, 21))
    model.train(data)
 
+Documentation Structure
+-----------------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Getting Started:
+   :caption: Getting Started
 
    tutorials/index
    tutorials/installation
@@ -102,7 +110,7 @@ Quick Start
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Guide:
+   :caption: User Guide
 
    user_guide/index
    user_guide/data_preprocessing
@@ -112,7 +120,7 @@ Quick Start
 
 .. toctree::
    :maxdepth: 2
-   :caption: Examples:
+   :caption: Examples
 
    examples/index
    examples/basic_usage
@@ -120,7 +128,7 @@ Quick Start
 
 .. toctree::
    :maxdepth: 2
-   :caption: API Reference:
+   :caption: API Reference
 
    api/index
    api/autoencoder
@@ -128,7 +136,7 @@ Quick Start
 
 .. toctree::
    :maxdepth: 2
-   :caption: Development:
+   :caption: Development
 
    development/index
    development/contributing
@@ -137,41 +145,41 @@ Quick Start
 
 .. toctree::
    :maxdepth: 1
-   :caption: About:
+   :caption: About
 
    about/changelog
    about/license
 
 Performance Metrics
-------------------
+-------------------
 
-AutoEncoder Model Performance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AutoEncoder Model
+~~~~~~~~~~~~~~~~~
 
-- **Reconstruction Accuracy**: MSE < 0.15 on validation set
-- **Anomaly Detection**: F1-Score > 0.52
-- **False Positive Rate**: < 20% on normal operations
+- **Reconstruction Error**: MSE < 0.15 on validation data
+- **Detection F1-Score**: > 0.52
+- **False Positives**: < 20% in nominal operating ranges
 
-Forecasting Model Performance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Forecasting Model
+~~~~~~~~~~~~~~~~~
 
-- **Prediction Accuracy**: RMSE < 15 cycles for RUL estimation
-- **Early Detection**: 60%+ anomalies detected 20+ cycles before failure
-- **Multi-step Forecasting**: Maintains accuracy up to 50-step horizon
+- **RUL Prediction Accuracy**: RMSE < 15 cycles
+- **Early Warning**: > 60% anomalies flagged at least 20 cycles pre-failure
+- **Long-Horizon Forecasting**: Maintains performance for up to 50 steps
 
-Dataset Information
-------------------
+Dataset Summary
+---------------
 
-**CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation by NASA)
+**NASA CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation)
 
 .. list-table::
    :header-rows: 1
 
-   * - Dataset
+   * - Subset
      - Fault Modes
      - Operating Conditions
-     - Training Engines
-     - Test Engines
+     - Training Units
+     - Test Units
    * - FD001
      - 1
      - 1
@@ -193,22 +201,22 @@ Dataset Information
      - 248
      - 249
 
-**Sensor Measurements**: 21 channels including fan speed, core speed, turbine temperatures, pressures, fuel flow, and vibration data.
+**Sensors**: 21 channels including fan speed, core speed, various temperatures and pressures, fuel flow, and vibration.
 
 Authors
 -------
 
-**Boutrid Mourad** - AI Engineering Student
+**Boutrid Mourad**  
+*AI Engineering Student*  
+📧 muurad.boutrid@gmail.com  
+🔗 `LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
 
-- 📧 Email: muurad.boutrid@gmail.com
-- 🔗 LinkedIn: `Mourad Boutrid <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
+**Kassimi Achraf**  
+*AI Engineering Student*  
+📧 ac.kassimi@edu.umi.ac.ma  
+🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
 
-**Kassimi Achraf** - AI Engineering Student
-
-- 📧 Email: ac.kassimi@edu.umi.ac.ma
-- 🔗 LinkedIn: `Achraf Kassimi <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
-
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
