@@ -1,275 +1,192 @@
-# TimeSeries AutoEncoder Anomaly Detection Pipeline
+# 🔥 Turbofan Engine Anomaly Detection
 
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.x-red.svg)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
----
+A state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines using dual LSTM architectures and the CMAPSS dataset.
 
-## 📋 Project Overview
-This project implements a comprehensive anomaly detection system for turbofan engine data using two complementary deep learning approaches:
+## 🎯 Overview
 
-LSTM AutoEncoder — Reconstruction-based anomaly detection
+This project implements a comprehensive anomaly detection and forecasting system for turbofan engines by leveraging two complementary deep learning approaches:
 
-Forecasting LSTM — Prediction-based anomaly detection
+- **LSTM AutoEncoder**: Reconstruction-based anomaly detection through sequence-to-sequence learning
+- **Forecasting LSTM**: Next-step prediction for early fault detection.
 
-Designed specifically for the CMAPSS (Commercial Modular Aero-Propulsion System Simulation) dataset, this system enables aircraft engine health monitoring, anomaly detection, and early failure prediction.
+The system provides robust, interpretable insights into engine health, enabling proactive maintenance strategies.
 
-The CMAPSS dataset consists of multi-sensor time series data collected from multiple turbofan engines operating under various conditions. Each engine’s operational cycle is represented by sensor readings capturing physical parameters such as temperature, pressure, fan speed, and vibration levels.
+## ✨ Key Features
 
-Number of Sensors: 21 sensor measurements per time step
+- **Dual Model Architecture**: Combines reconstruction and forecasting approaches for comprehensive anomaly detection
+- **Real-time Monitoring**: Interactive Streamlit dashboard for live engine health visualization
+- **Multivariate Analysis**: Handles 21 sensor channels with temporal dependencies and inter-correlations
+- **Scalable Pipeline**: Modular design supporting both research and production deployment
+- **Advanced Preprocessing**: Robust data normalization and sequence generation
+- **Multiple Detection Methods**: LSTM-based, statistical anomaly detection
+- **Performance Metrics**: Comprehensive evaluation with MSE, MAE, precision-recall, and accuracy
 
-Sensor Types: Include but are not limited to:
+## 🏗️ Architecture
 
-Total temperature at fan inlet
-
-Total pressure at fan inlet
-
-Fan speed
-
-Core speed
-
-Turbine inlet temperature
-
-Fuel flow
-
-Static pressure
-
-Vibration measurements
-
-Data Characteristics:
-
-Variable-length sequences representing engine life cycles
-
-Multiple operating conditions and fault modes
-
-Sensor readings sampled at regular intervals
-
-By leveraging these detailed sensor readings, the system captures complex temporal patterns and dependencies to accurately detect anomalies indicating potential engine degradation or failure.
-
----
-
-## 🏗️ Architecture Overview
-
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                          DATA PIPELINE                          │
-├─────────────────────────────────────────────────────────────────┤
-│         DataLoader → DataPreprocessor → Feature Selection       │
-└─────────────────────────────────────────────────────────────────┘
-                               ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                     DUAL MODEL APPROACH                         │
-├─────────────────────┬───────────────────────────────────────────┤
-│  AUTOENCODER BRANCH │           FORECASTER BRANCH               │
-│                     │                                           │
-│  LSTMAutoencoder    │     PrognosticLSTMModel                   │
-│  AnomalyDetector    │     AnomalyDetectionEngine                │
-│  Visualizer         │     PrognosticVisualizationSuite          │
-└─────────────────────┴───────────────────────────────────────────┘
-                               ↓
-┌─────────────────────────────────────────────────────────────────┐
-│              ANALYSIS & DEPLOYMENT                              │
-├─────────────────────────────────────────────────────────────────┤
-│  AnomalyAnalyzer → ModelManager → Streamlit App          │
-└─────────────────────────────────────────────────────────────────┘
+### LSTM AutoEncoder Model
+```
+CMAPSSDataLoader → CMAPSSPreprocessor → LSTMAutoEncoder → AnomalyDetector
+                                                                ↓
+                        ModelManager ← Visualizer ← CMAPSSAnomalyAnalyzer
 ```
 
----
+### Forecasting LSTM Model
+```
+CMAPSSDataProcessor → PrognosticFeatureSelector → PrognosticLSTMModel
+                                                         ↓
+AnomalyDetectionEngine ← PrognosticVisualizationSuite ← CMAPSSPrognosticHealthMonitor
+```
 
-## 🔄 Pipeline Workflow
+## 📁 Repository Structure
 
-### Phase 1: Data Ingestion and Preprocessing
-
-* **DataLoader**: Loads and structures the dataset.
-* **DataPreprocessor**: Cleans and normalizes data; generates sequences.
-
-### Phase 2: Feature Engineering and Selection
-
-* **PrognosticFeatureSelector**: Identifies relevant sensors.
-* **CMAPSSDataProcessor**: Removes constants, handles outliers and missing values.
-
-### Phase 3: Model Training and Prediction
-
-#### AutoEncoder Branch
-
-* **LSTMAutoencoder**: Encoder-decoder model for reconstruction.
-* **AnomalyDetector**: Detects anomalies via reconstruction error, Z-score, and wavelet transform.
-
-#### Forecasting Branch
-
-* **PrognosticLSTMModel**: Forecasts future values.
-* **AnomalyDetectionEngine**: Detects anomalies based on forecast deviation.
-
-### Phase 4: Analysis and Monitoring
-
-* **PrognosticHealthMonitor**: Full health evaluation.
-* **AnomalyAnalyzer**: Model testing, performance comparison.
-
-### Phase 5: Visualization and Reporting
-
-* **Visualizer**: Plots training and detection results.
-* **PrognosticVisualizationSuite**: Forecast and anomaly insights.
-
-### Phase 6: Model Management and Deployment
-
-* **ModelManager**: Save/load models and configuration.
-* **Streamlit App (`app.py`)**: Web UI for users to run the system interactively.
-
----
-
-## 🎯 Key Features
-
-* **Dual-Strategy Detection**: Combines reconstruction and forecasting.
-* **Ensemble Analysis**: Multiple detection techniques for robustness.
-* **Advanced Visuals**: Charts and dashboards for insight.
-* **Modular Design**: Easy extension, testability, and scaling.
-* **Web Interface**: Streamlit app for non-technical usage.
-
----
+```
+turbofan-anomaly-detection/
+├── data/                       # Raw and processed CMAPSS dataset files
+│   ├── train/                  # Preprocessed training sequences
+│   └── test/                   # Preprocessed test sequences
+├── models/                     # Serialized pretrained models (.h5 / .keras)
+├── notebooks/                  # Analytical notebooks for data exploration
+├── src/                        # Core modules
+│   ├── data_processing.py      # Data ingestion and feature engineering
+│   ├── modeling.py             # LSTM architectures
+│   ├── training.py             # Training pipeline and callbacks
+│   ├── inference.py            # Anomaly detection workflows
+│   ├── visualization.py        # Visualization utilities
+│   └── utils.py                # Common utility functions
+├── streamlit_app/              # Interactive web application
+│   ├── app.py                  # Streamlit main entrypoint
+│   └── components.py           # UI components
+├── requirements.txt            # Project dependencies
+├── README.md                   # This documentation
+└── LICENSE                     # License information
+```
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Prerequisites
+- Python 3.8+
+- Virtual environment (recommended)
 
-```bash
-pip install -r requirements.txt
-```
+### Installation
 
-### 2. Run Model Testing 
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/mouradboutrid/-TurboGuard.git
+   cd TurboGuard
+   ```
 
-```python
-# AutoEncoder
-python src/autoencoder_anomaly_predictor_test.py.py
+2. **Set up virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-# Forecaster
-python forecaster_anomaly_predictor_test.py
-```
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 3. Run Anomaly Detection
+### Usage
 
-```python
-python detect_anomalies.py
-```
-
-### 4. Launch Web App
-
+#### Launch Interactive Dashboard
 ```bash
 streamlit run app.py
 ```
 
----
+#### Train Models Programmatically
+```python
+from src.modeling import LSTMAutoencoder, PrognosticLSTMModel
+from src.data_processing import CMAPSSDataLoader
+
+# Load and preprocess data
+loader = CMAPSSDataLoader()
+data = loader.load_dataset('FD001')
+
+# Train AutoEncoder
+autoencoder = LSTMAutoencoder()
+autoencoder.build_model(input_shape=(50, 21))
+autoencoder.train(data)
+
+# Detect anomalies
+anomalies = autoencoder.detect_anomalies(test_data)
+```
+
+## 🛠️ Core Components
+
+### Data Processing
+- **DataLoader**: Handles CMAPSS dataset ingestion and management
+- **DataPreprocessor**: Implements normalization, sequencing, and feature engineering
+- **PrognosticFeatureSelector**: Calculates prognostic relevance for optimal feature selection
+
+### Model Architectures
+- **LSTMAutoencoder**: Deep LSTM encoder-decoder for reconstruction-based anomaly detection
+- **PrognosticLSTMModel**: Multi-step forecasting LSTM with operational context integration
+
+### Anomaly Detection
+- **AnomalyDetector**: Multi-method anomaly detection (LSTM, statistical, wavelet)
+- **AnomalyDetectionEngine**: Real-time anomaly scoring and threshold management
+
+### Visualization & Analysis
+- **Visualizer**: Comprehensive plotting utilities for anomalies and training metrics
+- **PrognosticVisualizationSuite**: Advanced visualization for prognostic analysis
+- **AnomalyAnalyzer**: Complete analysis pipeline with performance comparison
+
+## 📊 Dataset Information
+
+**CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation by NASA)
+
+- **21 Sensor Channels**: Fan speed, core speed, turbine temperatures, pressures, fuel flow, vibrations
+- **Multiple Operational Modes**: Various engine configurations and fault conditions
+- **Variable Cycle Lengths**: Real-world variability in engine run-to-failure data
+- **Benchmark Dataset**: Widely used in prognostics and health management research
 
 ## 📈 Performance Metrics
 
-### Model Evaluation
+The system is evaluated on CMAPSS FD004 test sets using:
 
-* **Precision, Recall, F1-Score**
-* **ROC-AUC**
-* **MAE / RMSE** for errors
+- **Reconstruction Metrics**: Mean Squared Error (MSE), Mean Absolute Error (MAE)
+- **Anomaly Detection**: Precision, Recall, F1-Score, AUC-ROC
+- **Robustness**: Performance across multiple fault modes and operational profiles
 
-### System Evaluation
+## 🔧 Advanced Features
 
-* **Latency / Throughput**
-* **Memory Use & Scalability**
-* **Detection Reliability**
+### Multiple Anomaly Detection Methods
+- **LSTM-based**: Reconstruction error analysis
+- **Statistical**: Distribution-based anomaly scoring
 
----
+### Model Management
+- **ModelManager**: Serialization and deserialization of trained models
+- **Version Control**: Track model performance across iterations
+- **Ensemble Methods**: Combine multiple detection approaches
 
-## 📊 Data Flow Diagram
+### Real-time Capabilities
+- **Streaming Processing**: Handle live sensor data streams
+- **Dynamic Thresholding**: Adaptive anomaly thresholds
+- **Alert System**: Configurable anomaly notifications
 
-```text
-Raw CMAPSS Data
-      ↓
-CMAPSSDataLoader
-      ↓
-CMAPSSPreprocessor
-      ↓
-┌─────────────────┬─────────────────┐
-│   AutoEncoder   │   Forecaster    │
-│     Branch      │     Branch      │
-│        ↓        │        ↓        │
-│ LSTMAutoencoder │ PrognosticLSTM  │
-│        ↓        │        ↓        │
-│ AnomalyDetector │ AnomalyEngine   │
-│        ↓        │        ↓        │
-│   Visualizer    │ PrognosticViz   │
-└─────────────────┴─────────────────┘
-              ↓
-      ModelManager
-              ↓
-    CMAPSSAnomalyAnalyzer
-              ↓
-        Streamlit App
-```
-
----
-
-## ⚙️ Configuration
-
-### Training
-
-* LSTM Units: 50–200
-* Sequence Length: 30–50
-* Dropout: 0.2–0.5
-* Batch Size: 32–128
-* Learning Rate: 0.001–0.01
-
-### Thresholds
-
-* Z-score > 3.0
-* Dynamic percentile for reconstruction
-* Ensemble voting supported
-
----
-
-## 📚 Dependencies
-
-* `TensorFlow`, `Keras`
-* `NumPy`, `Pandas`, `scikit-learn`
-* `matplotlib`, `seaborn`, `plotly`
-* `PyWavelets`, `joblib`, `Streamlit`
-
----
-
-## 🧭 Future Enhancements
-
-* Transformer & attention-based architectures
-* Real-time and online detection
-* Graph neural networks for sensor connectivity
-* Cloud deployment and auto-retraining
-
----
-
-## 📁 Repository Structure
-
-```text
-.
-├── data/                # CMAPSS dataset files
-├── models/              # Trained model artifacts
-├── scripts/             # Training & detection scripts
-├── app.py               # Streamlit app entry point
-├── README.md            # Project overview
-├── requirements.txt     # Python dependencies
-└── utils/               # Preprocessing and feature engineering helpers
-```
-
----
 
 ## 📄 License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## 📬 Contact
 
-## 🙋 Contributing
+**Boutrid Mourad & Kassimi Achraf** - AI Engineering Students
 
-Contributions are welcome! Please open an issue or submit a pull request with suggestions, improvements, or bug fixes.
+- 📧 Email: muurad.boutrid@gmail.com
+- 📧 Email: ac.kassimi@edu.umi.ac.ma
+- 🔗 LinkedIn: [https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/mourad-boutrid-981659336)
+- 🔗 LinkedIn: [https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/achraf-kassimi-605418285)
 
----
+## 🙏 Acknowledgments
 
-## 📞 Contact
+- NASA for providing the CMAPSS dataset
+- Contributors to the open-source libraries used in this project
 
-For questions or collaboration opportunities, please reach out via GitHub Issues or email.
 
+⭐ **Star this repository if you find it helpful!**
