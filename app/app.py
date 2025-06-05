@@ -532,5 +532,4 @@ def display_results(results, detection_methods=None):
             mime="text/csv"
         )
 
-if __name__ == "__main__":
-    main()
+main()
