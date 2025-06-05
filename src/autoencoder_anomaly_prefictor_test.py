@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from anomaly_analyzer import AnomalyAnalyzer  
+from src.LSTM_Autoencoder.anomaly_analyzer import AnomalyAnalyzer  
 
 
 # Example usage and utility functions
