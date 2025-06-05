@@ -1,162 +1,212 @@
-# TurboGuard Documentation
+TurboGuard Documentation
+========================
 
-![Python Version](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.x-red.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+.. image:: https://img.shields.io/badge/Python-3.8+-blue.svg
+   :target: https://www.python.org/downloads/
+   :alt: Python Version
 
-**TurboGuard** is an advanced deep learning framework engineered for predictive maintenance and real-time anomaly detection in turbofan engines. Built upon a sophisticated dual LSTM architecture, it leverages the comprehensive NASA CMAPSS dataset to deliver industrial-grade engine health monitoring solutions that predict failures before they occur.
+.. image:: https://img.shields.io/badge/TensorFlow-2.x-orange.svg
+   :target: https://tensorflow.org/
+   :alt: TensorFlow
 
-## System Architecture
+.. image:: https://img.shields.io/badge/Streamlit-1.x-red.svg
+   :target: https://streamlit.io/
+   :alt: Streamlit
 
-```mermaid
-graph TD
-    A[📊 DataLoader] --> B[🔄 DataPreprocessor]
-    B --> C[🧠 LSTMAutoEncoder]
-    C --> D[🚨 AnomalyDetector]
-    D --> E[📈 Visualizer]
-    E --> F[🔍 CMAPSSAnomalyAnalyzer]
-    F --> G[💾 ModelManager]
+.. image:: https://img.shields.io/badge/License-MIT-green.svg
+   :target: https://opensource.org/licenses/MIT
+   :alt: License
 
-    style A fill:#e1f5fe
-    style C fill:#f3e5f5
-    style D fill:#fff3e0
-    style F fill:#e8f5e8
-```
+**TurboGuard** is a state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines, built on dual LSTM architectures and powered by the CMAPSS dataset.
 
-## Overview
 
-TurboGuard revolutionizes turbofan engine health monitoring through an innovative dual-LSTM approach that combines two complementary detection methodologies:
 
-- **LSTM AutoEncoder**: Employs unsupervised reconstruction learning to identify anomalous patterns by detecting deviations from normal operational sequences
-- **Forecasting LSTM**: Utilizes supervised time-series prediction to anticipate future engine behavior, enabling early detection of degradation trends and accurate Remaining Useful Life (RUL) estimation
 
-This synergistic architecture enables proactive maintenance strategies, substantially reduces unplanned downtime, and optimizes operational efficiency across turbofan engine fleets.
+Overview
+--------
 
-## Key Features
+TurboGuard implements a comprehensive system for turbofan engine health monitoring through two synergistic LSTM-based methods:
 
-✨ **Hybrid Detection Architecture**  
-Combines reconstruction-based anomaly detection with predictive forecasting for enhanced reliability and reduced false positives.
+- **LSTM AutoEncoder**: Learns to reconstruct input sequences and flags deviations as anomalies.
+- **Forecasting LSTM**: Predicts future values to detect abnormal trends and estimate Remaining Useful Life (RUL).
 
-🎯 **Interactive Real-Time Dashboard**  
-Streamlit-powered interface providing live engine health visualization, anomaly alerts, and maintenance scheduling insights.
+The framework enables proactive maintenance, minimizes downtime, and optimizes operational efficiency.
 
-📊 **Comprehensive Multivariate Analysis**  
-Processes all 21 CMAPSS sensor channels simultaneously, capturing complex interdependencies and temporal patterns across engine subsystems.
+Key Features
+------------
 
-🔧 **Production-Ready Modularity**  
-Engineered with pluggable components and scalable architecture suitable for both research environments and industrial deployment.
+✨ **Dual Model Architecture**  
+Combines reconstruction-based and forecasting-based methods for more reliable anomaly detection.
 
-⚡ **Intelligent Preprocessing Pipeline**  
-Features advanced normalization techniques, adaptive sequence windowing, automated feature selection, and noise filtering.
+🎯 **Interactive Dashboard**  
+Real-time visualization and health analytics using Streamlit.
 
-🚨 **Multi-Modal Detection Strategies**  
-Integrates LSTM reconstruction error analysis, forecasting deviation metrics, statistical threshold monitoring, and ensemble decision making.
+📊 **Multivariate Sensor Analysis**  
+Processes all 21 sensor channels with full temporal and contextual awareness.
 
-📈 **Comprehensive Performance Analytics**  
-Provides detailed evaluation through MSE, MAE, RMSE, F1-score, precision-recall curves, ROC analysis, and anomaly lead-time assessment.
+🔧 **Modular and Scalable**  
+Designed for both research and production environments with pluggable components.
 
-## Quick Start
+⚡ **Advanced Preprocessing**  
+Supports robust normalization, dynamic sequence generation, and feature selection.
 
-```bash
-# Clone the repository
-git clone https://github.com/mouradboutrid/TurboGuard.git
-cd TurboGuard
+🚨 **Multiple Detection Strategies**  
+Uses LSTM reconstruction errors, forecasting deviations, and statistical thresholds.
 
-# Install dependencies
-pip install -r requirements.txt
+📈 **Detailed Evaluation Metrics**  
+Includes MSE, MAE, RMSE, F1-score, precision-recall, and anomaly lead-time.
 
-# Launch the dashboard
-streamlit run app/app.py
-```
+Quick Start
+-----------
 
-```python
-# Minimal implementation example
-from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
-from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
+.. code-block:: bash
 
-# Initialize data pipeline
-loader = CMAPSSDataLoader()
-data = loader.load_dataset('FD001')
+   # Clone the repository
+   git clone https://github.com/mouradboutrid/TurboGuard.git
+   cd TurboGuard
 
-# Configure and train model
-model = LSTMAutoEncoder()
-model.build_model(input_shape=(50, 21))
-model.train(data)
+   # Install dependencies
+   pip install -r requirements.txt
 
-# Perform anomaly detection
-anomalies = model.detect_anomalies(test_data)
-```
+   # Launch the dashboard
+   streamlit run app/app.py
 
-## Performance Benchmarks
+.. code-block:: python
 
-### AutoEncoder Model Performance
-- **Reconstruction Precision**: MSE < 0.15 on validation datasets
-- **Anomaly Detection F1-Score**: > 0.52 with balanced precision-recall
-- **False Positive Rate**: < 20% during nominal operating conditions
-- **Training Convergence**: Stable within 100 epochs
+   # Minimal example
+   from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
+   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
 
-### Forecasting Model Performance
-- **RUL Prediction Accuracy**: RMSE < 15 cycles across all fault modes
-- **Early Warning Capability**: > 60% of critical anomalies detected ≥20 cycles before failure
-- **Long-Horizon Forecasting**: Maintains prediction accuracy up to 50 time steps
-- **Multi-Condition Robustness**: Consistent performance across varying operational environments
+   loader = CMAPSSDataLoader()
+   data = loader.load_dataset('FD001')
 
-## Dataset Overview
+   model = LSTMAutoEncoder()
+   model.build_model(input_shape=(50, 21))
+   model.train(data)
+
+Documentation Structure
+-----------------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Getting Started
+
+   tutorials/index
+   tutorials/installation
+   tutorials/quickstart
+   tutorials/first_model
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Guide
+
+   user_guide/index
+   user_guide/data_preprocessing
+   user_guide/model_training
+   user_guide/anomaly_detection
+   user_guide/visualization
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Examples
+
+   examples/index
+   examples/basic_usage
+   examples/advanced_usage
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+
+   api/index
+   api/autoencoder
+   api/forecasting
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Development
+
+   development/index
+   development/contributing
+   development/architecture
+   development/testing
+
+.. toctree::
+   :maxdepth: 1
+   :caption: About
+
+   about/changelog
+   about/license
+
+Performance Metrics
+-------------------
+
+AutoEncoder Model
+~~~~~~~~~~~~~~~~~
+
+- **Reconstruction Error**: MSE < 0.15 on validation data
+- **Detection F1-Score**: > 0.52
+- **False Positives**: < 20% in nominal operating ranges
+
+Forecasting Model
+~~~~~~~~~~~~~~~~~
+
+- **RUL Prediction Accuracy**: RMSE < 15 cycles
+- **Early Warning**: > 60% anomalies flagged at least 20 cycles pre-failure
+- **Long-Horizon Forecasting**: Maintains performance for up to 50 steps
+
+Dataset Summary
+---------------
 
 **NASA CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation)
 
-| Subset | Fault Modes | Operating Conditions | Training Units | Test Units |
-|--------|-------------|---------------------|----------------|------------|
-| FD001  | 1           | 1                   | 100            | 100        |
-| FD002  | 1           | 6                   | 260            | 259        |
-| FD003  | 2           | 1                   | 100            | 100        |
-| FD004  | 2           | 6                   | 248            | 249        |
+.. list-table::
+   :header-rows: 1
 
-**Sensor Array**: 21-channel comprehensive monitoring including fan speed (N1), core speed (N2), exhaust gas temperature (EGT), fuel flow rate, compressor discharge temperature, turbine inlet temperature, and various pressure measurements across engine stages.
+   * - Subset
+     - Fault Modes
+     - Operating Conditions
+     - Training Units
+     - Test Units
+   * - FD001
+     - 1
+     - 1
+     - 100
+     - 100
+   * - FD002
+     - 1
+     - 6
+     - 260
+     - 259
+   * - FD003
+     - 2
+     - 1
+     - 100
+     - 100
+   * - FD004
+     - 2
+     - 6
+     - 248
+     - 249
 
-## Documentation Structure
+**Sensors**: 21 channels including fan speed, core speed, various temperatures and pressures, fuel flow, and vibration.
 
-### Getting Started
-- [Installation Guide](tutorials/installation)
-- [Quick Start Tutorial](tutorials/quickstart)
-- [First Model Training](tutorials/first_model)
-
-### User Guide
-- [Data Preprocessing](user_guide/data_preprocessing)
-- [Model Training & Optimization](user_guide/model_training)
-- [Anomaly Detection Strategies](user_guide/anomaly_detection)
-- [Visualization & Monitoring](user_guide/visualization)
-
-### Examples
-- [Basic Usage Patterns](examples/basic_usage)
-- [Advanced Implementation](examples/advanced_usage)
-- [Production Deployment](examples/production)
-
-### API Reference
-- [AutoEncoder API](api/autoencoder)
-- [Forecasting API](api/forecasting)
-- [Utilities & Helpers](api/utilities)
-
-### Development
-- [Contributing Guidelines](development/contributing)
-- [System Architecture](development/architecture)
-- [Testing Framework](development/testing)
-
-## Authors
+Authors
+-------
 
 **Boutrid Mourad**  
 *AI Engineering Student*  
 📧 muurad.boutrid@gmail.com  
-🔗 [LinkedIn](https://www.linkedin.com/in/mourad-boutrid-981659336)
+🔗 `LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
 
 **Kassimi Achraf**  
 *AI Engineering Student*  
 📧 ac.kassimi@edu.umi.ac.ma  
-🔗 [LinkedIn](https://www.linkedin.com/in/achraf-kassimi-605418285)
+🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
 
----
+Indices and Tables
+==================
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
