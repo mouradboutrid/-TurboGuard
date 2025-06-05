@@ -10,8 +10,8 @@ import streamlit as st
 from plotly.subplots import make_subplots
 from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_absolute_error
-from some_module import AnomalyPredictorApp   
-from some_module import AutoencoderAnomalyAnalyzer
+from app.forecaster_anomaly_predictor_app import AnomalyPredictorApp   
+from app.autoencoder_anomaly_detector_app import AutoencoderAnomalyPredictor
 
 MODEL_PATHS = {
     'forecasting': {
