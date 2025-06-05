@@ -289,12 +289,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ![GitHub issues](https://img.shields.io/github/issues/mouradboutrid/TurboGuard)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/mouradboutrid/TurboGuard)
 
-**Current Version**: 2.0.0  
+**Current Version**: 1.0.0  
 **Status**: Active Development  
-**Maintenance**: Actively Maintained
 
 ---
 
 ⭐ **If you find TurboGuard helpful for your research or projects, please consider starring this repository!**
-
-*For detailed technical discussions, feature requests, or collaboration opportunities, feel free to open an issue or contact the authors directly.*
