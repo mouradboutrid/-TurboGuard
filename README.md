@@ -1,4 +1,4 @@
-# 🔥 TurboGuard: Turbofan Engine Anomaly Detection
+# ✈️ TurboGuard: Turbofan Engine Anomaly Detection
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org/)
@@ -30,15 +30,15 @@ The system provides robust, interpretable insights into engine health, enabling 
 
 ### LSTM AutoEncoder Pipeline
 ```
-CMAPSSDataLoader → CMAPSSPreprocessor → LSTMAutoEncoder → AnomalyDetector
-                                                                ↓
-                        ModelManager ← Visualizer ← CMAPSSAnomalyAnalyzer
+DataLoader → DataPreprocessor → LSTMAutoEncoder → AnomalyDetector
+                                                         ↓
+                    ModelManager ← Visualizer ← CMAPSSAnomalyAnalyzer
 ```
 
 ### Forecasting LSTM Pipeline
 ```
-CMAPSSDataProcessor → PrognosticFeatureSelector → PrognosticLSTMModel
-                                                         ↓
+                 DataProcessor → PrognosticFeatureSelector → PrognosticLSTMModel
+                                                                     ↓
 AnomalyDetectionEngine ← PrognosticVisualizationSuite ← CMAPSSPrognosticHealthMonitor
 ```
 
@@ -95,13 +95,13 @@ TurboGuard/
 ### Prerequisites
 - Python 3.8 or higher
 - Virtual environment (recommended)
-- 8GB+ RAM for model training
+- 6GB+ RAM for model training
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/mouradboutrid/TurboGuard.git
+   git clone https://github.com/mouradboutrid/-TurboGuard.git
    cd TurboGuard
    ```
 
@@ -128,14 +128,14 @@ Launch the main Streamlit application:
 streamlit run app/app.py
 ```
 
-#### 2. Specific Model Applications
+#### 2. Specific Model Testing 
 - **AutoEncoder Anomaly Detection**:
   ```bash
-  streamlit run app/autoencoder_anomaly_detector_app.py
+  run src/autoencoder_anomaly_predictor_test.py
   ```
 - **Forecasting-based Prediction**:
   ```bash
-  streamlit run app/forecaster_anomaly_predictor_app.py
+  run src/forecaster_anomaly_predictor_test.py
   ```
 
 #### 3. Programmatic Usage
@@ -191,13 +191,13 @@ anomalies = detector.detect_anomalies(test_data)
 ## 📈 Performance Metrics
 
 ### AutoEncoder Model Performance
-- **Reconstruction Accuracy**: MSE < 0.001 on validation set
-- **Anomaly Detection**: F1-Score > 0.92, AUC-ROC > 0.95
-- **False Positive Rate**: < 5% on normal operations
+- **Reconstruction Accuracy**: MSE < 0.15 on validation set
+- **Anomaly Detection**: F1-Score > 0.52
+- **False Positive Rate**: < 20% on normal operations
 
 ### Forecasting Model Performance
 - **Prediction Accuracy**: RMSE < 15 cycles for RUL estimation
-- **Early Detection**: 85%+ anomalies detected 20+ cycles before failure
+- **Early Detection**: 60%+ anomalies detected 20+ cycles before failure
 - **Multi-step Forecasting**: Maintains accuracy up to 50-step horizon
 
 ## 🔧 Advanced Features
@@ -229,8 +229,8 @@ anomalies = detector.detect_anomalies(test_data)
 ## 📚 Documentation
 
 - **Technical Report**: `Damage_Propagation_Modeling.pdf`
-- **API Documentation**: Generated using Sphinx (coming soon)
-- **User Guide**: Comprehensive tutorials in `/docs` (coming soon)
+- **API Documentation**: 
+- **User Guide**: 
 
 ## 🤝 Contributing
 
