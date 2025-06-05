@@ -10,7 +10,7 @@ from sklearn.cluster import KMeans
 from tensorflow.keras.models import load_model
 from tensorflow.keras.callbacks import EarlyStopping
 from src.Forecasting_LSTM.prognostic_visualization_suite import PrognosticVisualizationSuite
-from src.Forecasting_LSTM.Prognostic_LSTMModel import PrognosticLSTMModel
+from src.Forecasting_LSTM.prognostic_LSTMModel import PrognosticLSTMModel
 from src.Forecasting_LSTM.anomaly_detection_engine import AnomalyDetectionEngine
 from src.Forecasting_LSTM.prognostic_feature_selector import PrognosticFeatureSelector
 from src.Forecasting_LSTM.forecasting_data_processor import DataProcessor
