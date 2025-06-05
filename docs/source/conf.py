@@ -10,8 +10,8 @@ sys.path.insert(0, os.path.abspath('../../src'))
 project = 'TurboGuard'
 copyright = '2024, Boutrid Mourad & Kassimi Achraf'
 author = 'Boutrid Mourad & Kassimi Achraf'
-version = '2.0.0'
-release = '2.0.0'
+version = '1.0.0'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -112,7 +112,7 @@ intersphinx_mapping = {
 }
 
 # Mermaid configuration
-mermaid_version = "9.4.0"
+mermaid_version = "10.3.0"
 mermaid_init_js = "mermaid.initialize({startOnLoad:true});"
 
 # MyST Parser configuration
