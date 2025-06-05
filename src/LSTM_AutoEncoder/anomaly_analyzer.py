@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from DataLoader import DataLoader
-from DataPreprocessor import DataPreprocessor
-from LSTMAutoencoder import LSTMAutoencoder
-from AnomalyDetector import AnomalyDetector
-from ModelManager import ModelManager
-from Visualizer import Visualizer
+from src.LSTM_AutoEncoder.data_loader import DataLoader
+from src.LSTM_AutoEncoder.data_preprocessor import DataPreprocessor
+from src.DataPreprocessor.lstm_autoencoder import LSTMAutoencoder
+from src.LSTMAutoencoder.anomaly_detector import AnomalyDetector
+from src.LSTMAutoencoder.model_manager import ModelManager
+from src.LSTMAutoencoder.visualizer import Visualizer
 
 
 class AnomalyAnalyzer:
@@ -250,7 +250,7 @@ class AnomalyAnalyzer:
                 ensemble_rates.append(engine_metrics['ensemble_anomaly_rate'])
 
             # Print average anomaly rates per dataset
-            if lstm_rates:  # Check if we have data
+            if lstm_rates:  # Check for the data
                 print(f"\n  Average anomaly rates for {dataset_id}:")
                 print(f"    LSTM anomaly rate:       {sum(lstm_rates) / len(lstm_rates):.4f}")
                 print(f"    Statistical anomaly rate: {sum(statistical_rates) / len(statistical_rates):.4f}")
