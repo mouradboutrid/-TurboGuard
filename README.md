@@ -1,21 +1,26 @@
 # TimeSeries AutoEncoder Anomaly Detection Pipeline
-## Project Structure and Workflow Documentation
+
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
 
 ---
 
 ## 📋 Project Overview
 
-This project implements a comprehensive anomaly detection system for time series data using two complementary approaches:
+This project implements a comprehensive anomaly detection system for time series data using two complementary deep learning approaches:
+
 1. **LSTM AutoEncoder** - Reconstruction-based anomaly detection
 2. **Forecasting LSTM** - Prediction-based anomaly detection
 
-The system is designed to work with the CMAPSS (Commercial Modular Aero-Propulsion System Simulation) dataset for aircraft engine health monitoring and failure prediction.
+Designed for the **CMAPSS (Commercial Modular Aero-Propulsion System Simulation)** dataset, it enables aircraft engine health monitoring, anomaly detection, and early failure prediction.
 
 ---
 
 ## 🏗️ Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                    DATA PIPELINE                                │
 ├─────────────────────────────────────────────────────────────────┤
@@ -45,184 +50,104 @@ The system is designed to work with the CMAPSS (Commercial Modular Aero-Propulsi
 
 ### Phase 1: Data Ingestion and Preprocessing
 
-#### 1.1 Data Loading (`CMAPSSDataLoader`)
-- **Purpose**: Load and structure CMAPSS dataset files
-- **Key Functions**:
-  - `load_dataset()`: Load train/test/RUL files
-  - `get_dataset()`: Retrieve processed datasets
-- **Input**: Raw CMAPSS CSV files
-- **Output**: Structured pandas DataFrames
-
-#### 1.2 Data Preprocessing (`CMAPSSPreprocessor`)
-- **Purpose**: Clean, normalize, and prepare data for modeling
-- **Key Functions**:
-  - `preprocess_data()`: Main preprocessing pipeline
-  - `_normalize_data()`: Scale features using MinMax/Standard scaling
-  - `split_by_engine()`: Separate data by engine units
-  - `create_sequences()`: Generate time-windowed sequences
-- **Transformations**:
-  - Feature normalization
-  - Sequence creation with sliding windows
-  - Train/validation splits
-  - Engine-wise data organization
+* **CMAPSSDataLoader**: Loads and structures the dataset.
+* **CMAPSSPreprocessor**: Cleans and normalizes data; generates sequences.
 
 ### Phase 2: Feature Engineering and Selection
 
-#### 2.1 Prognostic Feature Selection (`PrognosticFeatureSelector`)
-- **Purpose**: Identify most relevant features for anomaly detection
-- **Key Functions**:
-  - `calculate_prognostic_relevance()`: Compute feature importance scores
-- **Techniques**:
-  - Correlation analysis with RUL (Remaining Useful Life)
-  - Statistical significance testing
-  - Domain knowledge integration
-
-#### 2.2 Data Processing (`CMAPSSDataProcessor`)
-- **Purpose**: Advanced data processing for forecasting models
-- **Key Functions**:
-  - `load_cmapss_data()`: Enhanced data loading
-  - `remove_constant_sensors()`: Filter non-informative sensors
-- **Features**:
-  - Sensor data validation
-  - Missing value handling
-  - Outlier detection and treatment
+* **PrognosticFeatureSelector**: Identifies relevant sensors.
+* **CMAPSSDataProcessor**: Removes constants, handles outliers and missing values.
 
 ### Phase 3: Model Training and Prediction
 
-#### 3.1 AutoEncoder Branch
+#### AutoEncoder Branch
 
-##### LSTMAutoencoder
-- **Architecture**: Encoder-Decoder LSTM network
-- **Key Functions**:
-  - `build_model()`: Construct autoencoder architecture
-  - `train()`: Train the reconstruction model
-  - `predict()`: Generate reconstructions
-  - `encode()`: Extract latent representations
-- **Features**:
-  - Multi-layer LSTM cells
-  - Dropout regularization
-  - Early stopping
-  - Model checkpointing
+* **LSTMAutoencoder**: Encoder-decoder model for reconstruction.
+* **AnomalyDetector**: Detects anomalies via reconstruction error, Z-score, and wavelet transform.
 
-##### AnomalyDetector
-- **Purpose**: Multiple anomaly detection algorithms
-- **Key Functions**:
-  - `detect_lstm_anomalies()`: Reconstruction error-based detection
-  - `detect_statistical_anomalies()`: Statistical outlier detection
-  - `detect_wavelet_anomalies()`: Wavelet transform-based detection
-- **Algorithms**:
-  - Reconstruction error thresholding
-  - Z-score statistical analysis
-  - Wavelet coefficient analysis
-  - Ensemble voting mechanism
+#### Forecasting Branch
 
-#### 3.2 Forecasting Branch
-
-##### PrognosticLSTMModel
-- **Architecture**: Sequence-to-sequence LSTM for forecasting
-- **Key Functions**:
-  - `build_model()`: Create forecasting architecture
-  - `create_sequences()`: Prepare sequential data
-  - `train()`: Train forecasting model
-  - `save_model()` / `load_model()`: Model persistence
-- **Features**:
-  - Multi-step ahead forecasting
-  - Attention mechanisms
-  - Bidirectional LSTM layers
-
-##### AnomalyDetectionEngine
-- **Purpose**: Forecast-based anomaly detection
-- **Key Functions**:
-  - `calculate_reconstruction_errors()`: Compute prediction errors
-  - `update_threshold()`: Dynamic threshold adjustment
-  - `detect_anomalies()`: Identify anomalous patterns
-- **Techniques**:
-  - Adaptive thresholding
-  - Prediction confidence intervals
-  - Temporal pattern analysis
+* **PrognosticLSTMModel**: Forecasts future values.
+* **AnomalyDetectionEngine**: Detects anomalies based on forecast deviation.
 
 ### Phase 4: Analysis and Monitoring
 
-#### 4.1 Health Monitoring (`CMAPSSPrognosticHealthMonitor`)
-- **Purpose**: Comprehensive system health analysis
-- **Key Functions**:
-  - `prepare_sequence_data()`: Data preparation for analysis
-  - `_create_sequences()`: Generate analysis sequences
-  - `run_complete_analysis()`: Execute full health assessment
-  - `_calculate_performance_metrics()`: Compute evaluation metrics
-  - `_save_analysis_results()`: Persist analysis outputs
-  - `load_trained_model()`: Load pre-trained models
-  - `predict_anomalies()`: Generate anomaly predictions
-
-#### 4.2 System Analysis (`CMAPSSAnomalyAnalyzer`)
-- **Purpose**: High-level system analysis and comparison
-- **Key Functions**:
-  - `analyze_dataset()`: Comprehensive dataset analysis
-  - `load_saved_model()`: Model loading and validation
-  - `predict_anomalies()`: Anomaly prediction pipeline
-  - `compare_all_datasets()`: Cross-dataset performance comparison
-  - `print_performance_comparison()`: Performance reporting
-  - `get_model_summary()`: Model architecture summary
-  - `list_available_models()`: Available model inventory
+* **CMAPSSPrognosticHealthMonitor**: Full health evaluation.
+* **CMAPSSAnomalyAnalyzer**: Model testing, performance comparison.
 
 ### Phase 5: Visualization and Reporting
 
-#### 5.1 AutoEncoder Visualization (`Visualizer`)
-- **Key Functions**:
-  - `plot_anomalies()`: Anomaly visualization with time series
-  - `plot_training_history()`: Training metrics visualization
-- **Visualizations**:
-  - Time series with anomaly highlights
-  - Reconstruction error plots
-  - Training/validation loss curves
-  - Feature importance heatmaps
-
-#### 5.2 Prognostic Visualization (`PrognosticVisualizationSuite`)
-- **Key Functions**:
-  - `plot_dataset_overview()`: Dataset summary visualizations
-  - `save_plot()`: Plot persistence utilities
-  - `plot_training_progress()`: Training progress monitoring
-  - `plot_anomaly_results()`: Anomaly detection results
-- **Visualizations**:
-  - Multi-sensor time series plots
-  - Forecasting accuracy charts
-  - Anomaly detection performance metrics
-  - Health indicator trends
+* **Visualizer**: Plots training and detection results.
+* **PrognosticVisualizationSuite**: Forecast and anomaly insights.
 
 ### Phase 6: Model Management and Deployment
 
-#### 6.1 Model Persistence (`ModelManager`)
-- **Key Functions**:
-  - `save_model_package()`: Save complete model packages
-  - `load_model_package()`: Load saved model packages
-- **Features**:
-  - Model versioning
-  - Metadata preservation
-  - Preprocessing pipeline serialization
-  - Configuration management
+* **ModelManager**: Save/load models and configuration.
+* **Streamlit App (`app.py`)**: Web UI for users to run the system interactively.
 
-#### 6.2 Testing and Validation (`CmapssAnomaliePredector`)
-- **Purpose**: Model testing and validation utilities
-- **Features**:
-  - Batch prediction testing
-  - Performance benchmarking
-  - Model comparison utilities
-  - Validation pipeline
+---
 
-#### 6.3 Web Application (`app.py`)
-- **Platform**: Streamlit-based web interface
-- **Features**:
-  - Interactive data exploration
-  - Real-time anomaly detection
-  - Model comparison dashboard
-  - Performance metrics visualization
-  - Export capabilities
+## 🎯 Key Features
+
+* **Dual-Strategy Detection**: Combines reconstruction and forecasting.
+* **Ensemble Analysis**: Multiple detection techniques for robustness.
+* **Advanced Visuals**: Charts and dashboards for insight.
+* **Modular Design**: Easy extension, testability, and scaling.
+* **Web Interface**: Streamlit app for non-technical usage.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Run Model Training
+
+```python
+# AutoEncoder
+python train_autoencoder.py
+
+# Forecaster
+python train_forecaster.py
+```
+
+### 3. Run Anomaly Detection
+
+```python
+python detect_anomalies.py
+```
+
+### 4. Launch Web App
+
+```bash
+streamlit run app.py
+```
+
+---
+
+## 📈 Performance Metrics
+
+### Model Evaluation
+
+* **Precision, Recall, F1-Score**
+* **ROC-AUC**
+* **MAE / RMSE** for errors
+
+### System Evaluation
+
+* **Latency / Throughput**
+* **Memory Use & Scalability**
+* **Detection Reliability**
 
 ---
 
 ## 📊 Data Flow Diagram
 
-```
+```text
 Raw CMAPSS Data
       ↓
 CMAPSSDataLoader
@@ -249,154 +174,69 @@ CMAPSSPreprocessor
 
 ---
 
-## 🎯 Key Features and Capabilities
+## ⚙️ Configuration
 
-### Dual Approach Strategy
-- **Reconstruction-based**: Detects anomalies through reconstruction errors
-- **Prediction-based**: Identifies anomalies through forecasting deviations
-- **Ensemble Methods**: Combines multiple detection algorithms for robust results
+### Training
 
-### Advanced Analytics
-- **Multi-sensor Analysis**: Handles 21 sensor readings simultaneously
-- **Temporal Pattern Recognition**: Captures complex time-dependent relationships
-- **Adaptive Thresholding**: Dynamic adjustment based on data characteristics
-- **Performance Monitoring**: Comprehensive metrics and KPI tracking
+* LSTM Units: 50–200
+* Sequence Length: 30–50
+* Dropout: 0.2–0.5
+* Batch Size: 32–128
+* Learning Rate: 0.001–0.01
 
-### Scalability and Deployment
-- **Modular Architecture**: Easy to extend and modify
-- **Model Versioning**: Track and manage different model versions
-- **Web Interface**: User-friendly dashboard for non-technical users
-- **Batch Processing**: Handle large datasets efficiently
+### Thresholds
+
+* Z-score > 3.0
+* Dynamic percentile for reconstruction
+* Ensemble voting supported
 
 ---
 
-## 🚀 Usage Pipeline
+## 📚 Dependencies
 
-### 1. Data Preparation
-```python
-# Load and preprocess data
-loader = CMAPSSDataLoader(data_path)
-preprocessor = CMAPSSPreprocessor()
-data = loader.load_dataset("FD001", train_file, test_file)
-processed_data = preprocessor.preprocess_data(data)
-```
+* `TensorFlow`, `Keras`
+* `NumPy`, `Pandas`, `scikit-learn`
+* `matplotlib`, `seaborn`, `plotly`
+* `PyWavelets`, `joblib`, `Streamlit`
 
-### 2. Model Training
-```python
-# AutoEncoder approach
-autoencoder = LSTMAutoencoder()
-autoencoder.train(processed_data)
+---
 
-# Forecasting approach
-forecaster = PrognosticLSTMModel()
-forecaster.train(processed_data)
-```
+## 🧭 Future Enhancements
 
-### 3. Anomaly Detection
-```python
-# Detect anomalies using both approaches
-detector = AnomalyDetector()
-ae_anomalies = detector.detect_lstm_anomalies(data)
+* Transformer & attention-based architectures
+* Real-time and online detection
+* Graph neural networks for sensor connectivity
+* Cloud deployment and auto-retraining
 
-engine = AnomalyDetectionEngine()
-forecast_anomalies = engine.detect_anomalies(data)
-```
+---
 
-### 4. Analysis and Visualization
-```python
-# Comprehensive analysis
-analyzer = CMAPSSAnomalyAnalyzer()
-results = analyzer.run_complete_analysis(data)
+## 📁 Repository Structure
 
-# Visualization
-visualizer = Visualizer()
-visualizer.plot_anomalies(results)
-```
-
-### 5. Deployment
-```python
-# Save models
-manager = ModelManager()
-manager.save_model_package(models, "production_v1")
-
-# Launch web app
-streamlit run app.py
+```text
+.
+├── data/                # CMAPSS dataset files
+├── models/              # Trained model artifacts
+├── scripts/             # Training & detection scripts
+├── app.py               # Streamlit app entry point
+├── README.md            # Project overview
+├── requirements.txt     # Python dependencies
+└── utils/               # Preprocessing and feature engineering helpers
 ```
 
 ---
 
-## 📈 Performance Metrics
+## 📄 License
 
-### Model Evaluation
-- **Precision/Recall/F1-Score**: Classification performance
-- **ROC-AUC**: Binary classification effectiveness
-- **Mean Absolute Error (MAE)**: Reconstruction/prediction accuracy
-- **Root Mean Square Error (RMSE)**: Error magnitude assessment
-
-### System Performance
-- **Processing Speed**: Data throughput and latency
-- **Memory Usage**: Resource efficiency monitoring
-- **Scalability**: Performance under increasing data loads
-- **Reliability**: System uptime and error rates
+This project is licensed under the MIT License. See `LICENSE` for details.
 
 ---
 
-## 🔧 Configuration Management
+## 🙋 Contributing
 
-### Model Hyperparameters
-- **LSTM Units**: 50-200 units per layer
-- **Sequence Length**: 30-50 time steps
-- **Learning Rate**: 0.001-0.01
-- **Batch Size**: 32-128 samples
-- **Dropout Rate**: 0.2-0.5
-
-### Detection Thresholds
-- **Reconstruction Error**: Dynamic percentile-based
-- **Statistical Outliers**: Z-score > 3.0
-- **Wavelet Coefficients**: Adaptive threshold
-- **Ensemble Voting**: Majority consensus
+Contributions are welcome! Please open an issue or submit a pull request with suggestions, improvements, or bug fixes.
 
 ---
 
-## 📚 Dependencies and Requirements
+## 📞 Contact
 
-### Core Libraries
-- TensorFlow/Keras: Deep learning framework
-- NumPy/Pandas: Data manipulation
-- Scikit-learn: Machine learning utilities
-- Matplotlib/Seaborn: Visualization
-
-### Specialized Libraries
-- PyWavelets: Wavelet analysis
-- Streamlit: Web application framework
-- Joblib: Model serialization
-- Plotly: Interactive visualizations
-
----
-
-## 🎯 Future Enhancements
-
-### Advanced Algorithms
-- Transformer-based architectures
-- Variational autoencoders
-- Graph neural networks for sensor relationships
-- Federated learning capabilities
-
-### System Improvements
-- Real-time streaming data processing
-- Automated model retraining
-- Advanced ensemble methods
-- Cloud deployment optimization
-
----
-
-## 📞 Project Structure Summary
-
-This pipeline provides a complete end-to-end solution for time series anomaly detection with:
-- **Comprehensive data processing** capabilities
-- **Dual model approach** for robust detection
-- **Advanced visualization** and analysis tools
-- **Production-ready deployment** options
-- **Extensive evaluation** and monitoring features
-
-The modular design ensures easy maintenance, extensibility, and scalability for industrial applications in predictive maintenance and health monitoring systems.
+For questions or collaboration opportunities, please reach out via GitHub Issues or email.
