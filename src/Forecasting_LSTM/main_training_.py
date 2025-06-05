@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 def main():
     """Example usage of the complete CMAPSS prognostic system"""
 
-    # Define data file paths (adjust these to your actual file locations)
+    # Define data file paths 
     data_filepaths = {
         'FD001': '/content/drive/MyDrive/CMAPSSData/train_FD001.txt',
         'FD002': '/content/drive/MyDrive/CMAPSSData/train_FD002.txt',
@@ -56,5 +56,4 @@ def main():
         print(f"Error during analysis: {e}")
 
 
-if __name__ == "__main__":
-    main()
+main()
