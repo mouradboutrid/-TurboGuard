@@ -29,64 +29,82 @@ The system provides robust, interpretable insights into engine health, enabling 
 ## 🏗️ System Architecture
 
 ### LSTM AutoEncoder Pipeline
-```
-DataLoader → DataPreprocessor → LSTMAutoEncoder → AnomalyDetector
-                                                         ↓
-                    ModelManager ← Visualizer ← CMAPSSAnomalyAnalyzer
+```mermaid
+graph TD
+    A[📊 DataLoader] --> B[🔄 DataPreprocessor]
+    B --> C[🧠 LSTMAutoEncoder]
+    C --> D[🚨 AnomalyDetector]
+    D --> E[📈 Visualizer]
+    E --> F[🔍 CMAPSSAnomalyAnalyzer]
+    F --> G[💾 ModelManager]
+    
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style D fill:#fff3e0
+    style F fill:#e8f5e8
 ```
 
 ### Forecasting LSTM Pipeline
-```
-                 DataProcessor → PrognosticFeatureSelector → PrognosticLSTMModel
-                                                                     ↓
-AnomalyDetectionEngine ← PrognosticVisualizationSuite ← CMAPSSPrognosticHealthMonitor
+```mermaid
+graph TD
+    A[📊 DataProcessor] --> B[🎯 PrognosticFeatureSelector]
+    B --> C[🔮 PrognosticLSTMModel]
+    C --> D[📊 PrognosticVisualizationSuite]
+    D --> E[🏥 CMAPSSPrognosticHealthMonitor]
+    E --> F[⚡ AnomalyDetectionEngine]
+    
+    style A fill:#e1f5fe
+    style B fill:#f1f8e9
+    style C fill:#f3e5f5
+    style E fill:#fff8e1
+    style F fill:#ffebee
 ```
 
 ## 📁 Repository Structure
 
 ```
 TurboGuard/
-├── app/                       
-│   ├──analyzer_app.py
-│   ├──app.py
-│   ├──autoencoder_anomaly_detector_app.py
-│   ├──forecaster_anomaly_predictor_app.py
-│   ├──loader_app.py         
-│   └── preprocessor_app.py                                   
-├── data/
-│   ├──RUL_FD00X.txt
-│   ├──test_FD00X.txt
-│   ├──train_FD00X.txt        
-│   └── readme.txt
-├── data_overview/
-├── results/
-│   ├── autoencoder__/           
-│   └── forecaster/        
-├── src/                       
-│   ├── LSTM_AutoEncoder/
-│   │    ├──anomaly_analyzer.py
-│   │    ├──anomaly_detector.py
-│   │    ├──data_loader.py
-│   │    ├──data_preprocessor.py
-│   │    ├──lstm_autoencoder.py
-│   │    ├──model_manager.py
-│   │    └── visualizer.py
-│   ├── Forecasting_LSTM/
-│   │    ├──anomaly_detection_engine.py
-│   │    ├──forecasting_data_processor.py
-│   │    ├──main_training_.py
-│   │    ├──prognostic_LSTMModel.py
-│   │    ├──prognostic_feature_selector.py
-│   │    ├──prognostic_health_monitor.py
-│   │    └── prognostic_visualization_suite.py                    
-│   ├── forecaster_anomaly_predictor_test.py       
-│   └── autoencoder_anomaly_predictor_test.py                
-├── trained_models/            
-│   ├── autoencoder_models/               
-│   └── forecaster_model/           
-├── requirements.txt            
+├── app/                                    # 🖥️ Streamlit Applications
+│   ├── analyzer_app.py                     # Main anomaly analysis dashboard
+│   ├── app.py                             # Primary application entry point
+│   ├── autoencoder_anomaly_detector_app.py # AutoEncoder-specific UI
+│   ├── forecaster_anomaly_predictor_app.py # Forecasting model UI
+│   ├── loader_app.py                      # Data loading interface
+│   └── preprocessor_app.py                # Data preprocessing dashboard
+├── data/                                  # 📂 CMAPSS Dataset Files
+│   ├── RUL_FD00X.txt                     # Remaining Useful Life labels
+│   ├── test_FD00X.txt                    # Test dataset
+│   ├── train_FD00X.txt                   # Training dataset
+│   └── readme.txt                        # Dataset documentation
+├── data_overview/                         # 📊 Data exploration notebooks
+├── results/                              # 📈 Model outputs and metrics
+│   ├── autoencoder_/                     # AutoEncoder results
+│   └── forecaster/                       # Forecasting model results
+├── src/                                  # 🔧 Core Implementation
+│   ├── LSTM_AutoEncoder/                 # AutoEncoder architecture
+│   │   ├── anomaly_analyzer.py           # Anomaly analysis engine
+│   │   ├── anomaly_detector.py           # Detection algorithms
+│   │   ├── data_loader.py               # CMAPSS data ingestion
+│   │   ├── data_preprocessor.py         # Feature engineering pipeline
+│   │   ├── lstm_autoencoder.py          # Core AutoEncoder model
+│   │   ├── model_manager.py             # Model persistence & versioning
+│   │   └── visualizer.py                # Visualization utilities
+│   ├── Forecasting_LSTM/                # Prognostic forecasting system
+│   │   ├── anomaly_detection_engine.py   # Real-time anomaly detection
+│   │   ├── forecasting_data_processor.py # Time series preprocessing
+│   │   ├── main_training_.py            # Training orchestration
+│   │   ├── prognostic_LSTMModel.py      # Forecasting model architecture
+│   │   ├── prognostic_feature_selector.py # Feature selection algorithms
+│   │   ├── prognostic_health_monitor.py  # Health monitoring system
+│   │   └── prognostic_visualization_suite.py # Advanced visualizations
+│   ├── forecaster_anomaly_predictor_test.py  # Forecasting model testing
+│   └── autoencoder_anomaly_predictor_test.py # AutoEncoder testing
+├── trained_models/                       # 🤖 Saved Model Artifacts
+│   ├── autoencoder_models/              # Trained AutoEncoder weights
+│   └── forecaster_model/                # Trained forecasting models
+├── requirements.txt                      # Python dependencies
 ├── README.md
-├── Damage Propagation Modeling.pdf                 
+├── Damage Propagation Modeling.pdf      # Technical documentation
 └── LICENSE
 ```
 
