@@ -17,35 +17,7 @@ TurboGuard Documentation
    :target: https://opensource.org/licenses/MIT
    :alt: License
 
-**TurboGuard** is a state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines using dual LSTM architectures and the CMAPSS dataset.
-
-.. note::
-   This documentation covers TurboGuard v2.0.0. For older versions, please check the :doc:`about/changelog`.
-
-Key Features
-------------
-
-✨ **Dual Model Architecture**: Combines reconstruction and forecasting approaches for comprehensive anomaly detection
-
-🖥️ **Interactive Dashboard**: Real-time Streamlit applications for engine health monitoring and visualization
-
-📊 **Multivariate Analysis**: Processes 21 sensor channels with temporal dependencies and inter-correlations
-
-🔧 **Modular Design**: Scalable pipeline supporting both research and production deployment
-
-🔄 **Advanced Preprocessing**: Robust data normalization, sequence generation, and feature selection
-
-🚨 **Multiple Detection Methods**: LSTM-based reconstruction error and statistical anomaly detection
-
-📈 **Comprehensive Evaluation**: Performance metrics including MSE, MAE, precision-recall, and accuracy
-
-System Architecture
--------------------
-
-TurboGuard implements two complementary deep learning pipelines:
-
-LSTM AutoEncoder Pipeline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+A state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines using dual LSTM architectures and the CMAPSS dataset.
 
 .. mermaid::
 
@@ -56,64 +28,72 @@ LSTM AutoEncoder Pipeline
        D --> E[📈 Visualizer]
        E --> F[🔍 CMAPSSAnomalyAnalyzer]
        F --> G[💾 ModelManager]
-       
+
        style A fill:#e1f5fe
        style C fill:#f3e5f5
        style D fill:#fff3e0
        style F fill:#e8f5e8
 
-The AutoEncoder pipeline focuses on **reconstruction-based anomaly detection** through sequence-to-sequence learning.
+Overview
+--------
 
-Forecasting LSTM Pipeline
-~~~~~~~~~~~~~~~~~~~~~~~~~
+TurboGuard implements a comprehensive anomaly detection and forecasting system for turbofan engines by leveraging two complementary deep learning approaches:
 
-.. mermaid::
+- **LSTM AutoEncoder**: Reconstruction-based anomaly detection through sequence-to-sequence learning
+- **Forecasting LSTM**: Next-step prediction for early fault detection and remaining useful life estimation
 
-   graph TD
-       A[📊 DataProcessor] --> B[🎯 PrognosticFeatureSelector]
-       B --> C[🔮 PrognosticLSTMModel]
-       C --> D[📊 PrognosticVisualizationSuite]
-       D --> E[🏥 CMAPSSPrognosticHealthMonitor]
-       E --> F[⚡ AnomalyDetectionEngine]
-       
-       style A fill:#e1f5fe
-       style B fill:#f1f8e9
-       style C fill:#f3e5f5
-       style E fill:#fff8e1
-       style F fill:#ffebee
+The system provides robust, interpretable insights into engine health, enabling proactive maintenance strategies and reducing operational costs.
 
-The Forecasting pipeline enables **next-step prediction** for early fault detection and remaining useful life estimation.
+Key Features
+------------
+
+✨ **Dual Model Architecture**: Combines reconstruction and forecasting approaches for comprehensive anomaly detection
+
+🎯 **Interactive Dashboard**: Real-time Streamlit applications for engine health monitoring and visualization
+
+📊 **Multivariate Analysis**: Processes 21 sensor channels with temporal dependencies and inter-correlations
+
+🔧 **Modular Design**: Scalable pipeline supporting both research and production deployment
+
+⚡ **Advanced Preprocessing**: Robust data normalization, sequence generation, and feature selection
+
+🚨 **Multiple Detection Methods**: LSTM-based reconstruction error and statistical anomaly detection
+
+📈 **Comprehensive Evaluation**: Performance metrics including MSE, MAE, precision-recall, and accuracy
 
 Quick Start
 -----------
 
-Get started with TurboGuard in just a few minutes:
-
 .. code-block:: bash
 
+   # Clone the repository
    git clone https://github.com/mouradboutrid/TurboGuard.git
    cd TurboGuard
+   
+   # Install dependencies
    pip install -r requirements.txt
+   
+   # Launch interactive dashboard
    streamlit run app/app.py
 
 .. code-block:: python
 
+   # Basic usage example
    from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
    from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
    
-   # Load and analyze turbofan engine data
+   # Load data
    loader = CMAPSSDataLoader()
    data = loader.load_dataset('FD001')
    
-   # Detect anomalies using LSTM AutoEncoder
-   autoencoder = LSTMAutoEncoder()
-   autoencoder.build_model(input_shape=(50, 21))
-   anomalies = autoencoder.detect_anomalies(data)
+   # Create and train model
+   model = LSTMAutoEncoder()
+   model.build_model(input_shape=(50, 21))
+   model.train(data)
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting Started
-   :hidden:
+   :caption: Getting Started:
 
    tutorials/index
    tutorials/installation
@@ -122,64 +102,69 @@ Get started with TurboGuard in just a few minutes:
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Guide
-   :hidden:
+   :caption: User Guide:
 
    user_guide/index
    user_guide/data_preprocessing
    user_guide/model_training
    user_guide/anomaly_detection
    user_guide/visualization
-   user_guide/dashboard
 
 .. toctree::
    :maxdepth: 2
-   :caption: Examples
-   :hidden:
+   :caption: Examples:
 
    examples/index
    examples/basic_usage
    examples/advanced_usage
-   examples/custom_datasets
-   examples/production_deployment
 
 .. toctree::
    :maxdepth: 2
-   :caption: API Reference
-   :hidden:
+   :caption: API Reference:
 
    api/index
    api/autoencoder
    api/forecasting
-   api/utilities
 
 .. toctree::
    :maxdepth: 2
-   :caption: Development
-   :hidden:
+   :caption: Development:
 
    development/index
    development/contributing
    development/architecture
    development/testing
-   development/performance
 
 .. toctree::
    :maxdepth: 1
-   :caption: About
-   :hidden:
+   :caption: About:
 
    about/changelog
    about/license
-   about/authors
+
+Performance Metrics
+------------------
+
+AutoEncoder Model Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Reconstruction Accuracy**: MSE < 0.15 on validation set
+- **Anomaly Detection**: F1-Score > 0.52
+- **False Positive Rate**: < 20% on normal operations
+
+Forecasting Model Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Prediction Accuracy**: RMSE < 15 cycles for RUL estimation
+- **Early Detection**: 60%+ anomalies detected 20+ cycles before failure
+- **Multi-step Forecasting**: Maintains accuracy up to 50-step horizon
 
 Dataset Information
--------------------
+------------------
 
-TurboGuard works with the **CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation) provided by NASA:
+**CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation by NASA)
 
-.. list-table:: CMAPSS Dataset Overview
-   :widths: 15 15 20 20 20
+.. list-table::
    :header-rows: 1
 
    * - Dataset
@@ -208,59 +193,22 @@ TurboGuard works with the **CMAPSS Dataset** (Commercial Modular Aero-Propulsion
      - 248
      - 249
 
-The dataset includes **21 sensor measurements** covering fan speed, core speed, turbine temperatures, pressures, fuel flow, and vibration data.
+**Sensor Measurements**: 21 channels including fan speed, core speed, turbine temperatures, pressures, fuel flow, and vibration data.
 
-Performance Highlights
-----------------------
+Authors
+-------
 
-.. container:: performance-grid
+**Boutrid Mourad** - AI Engineering Student
 
-   .. container:: performance-item
+- 📧 Email: muurad.boutrid@gmail.com
+- 🔗 LinkedIn: `Mourad Boutrid <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
 
-      **AutoEncoder Model**
-      
-      * Reconstruction Accuracy: MSE < 0.15
-      * Anomaly Detection F1-Score: > 0.52
-      * False Positive Rate: < 20%
+**Kassimi Achraf** - AI Engineering Student
 
-   .. container:: performance-item
+- 📧 Email: ac.kassimi@edu.umi.ac.ma
+- 🔗 LinkedIn: `Achraf Kassimi <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
 
-      **Forecasting Model**
-      
-      * RUL Prediction RMSE: < 15 cycles
-      * Early Detection: 60%+ anomalies detected 20+ cycles before failure
-      * Multi-step Forecasting: Up to 50-step horizon
-
-Need Help?
-----------
-
-.. container:: help-grid
-
-   .. container:: help-item
-
-      📚 **New to TurboGuard?**
-      
-      Start with our :doc:`tutorials/quickstart` guide and follow the step-by-step :doc:`tutorials/first_model` tutorial.
-
-   .. container:: help-item
-
-      🔧 **Ready to Build?**
-      
-      Check out the :doc:`user_guide/index` for comprehensive documentation on all features.
-
-   .. container:: help-item
-
-      💻 **Need Code Examples?**
-      
-      Browse our :doc:`examples/index` section for real-world use cases and implementation patterns.
-
-   .. container:: help-item
-
-      🚀 **Contributing?**
-      
-      Read our :doc:`development/contributing` guide to get started with development.
-
-Indices and Tables
+Indices and tables
 ==================
 
 * :ref:`genindex`
