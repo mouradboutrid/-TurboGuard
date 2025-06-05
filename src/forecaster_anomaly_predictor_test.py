@@ -1,5 +1,3 @@
-
-
 import os
 import json
 import pandas as pd
@@ -37,7 +35,7 @@ class AnomalyPredictorTest:
 
         # Different approaches to load the model
         try:
-            # Method 1: Load with custom objects
+            # Load with custom objects
             custom_objects = {
                 'mse': tf.keras.metrics.MeanSquaredError(),
                 'mae': tf.keras.metrics.MeanAbsoluteError(),
@@ -50,7 +48,7 @@ class AnomalyPredictorTest:
         except Exception as e1:
             print(f"First attempt failed: {e1}")
             try:
-                # Method 2: Load without compiling
+                # Load without compiling
                 self.model = load_model(self.model_path, compile=False)
                 print("Model loaded successfully without compilation!")
 
@@ -65,7 +63,7 @@ class AnomalyPredictorTest:
             except Exception as e2:
                 print(f"Second attempt failed: {e2}")
                 try:
-                    # Method 3: Load with TensorFlow's SavedModel format if available
+                    # Load with TensorFlow's SavedModel format 
                     import tensorflow.keras.utils as utils
                     self.model = tf.keras.models.load_model(
                         self.model_path,
@@ -566,5 +564,4 @@ def main():
         import traceback
         traceback.print_exc()
 
-if __name__ == "__main__":
-    main()
+main()
