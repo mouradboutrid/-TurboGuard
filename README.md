@@ -8,13 +8,45 @@
 ---
 
 ## 📋 Project Overview
+This project implements a comprehensive anomaly detection system for turbofan engine data using two complementary deep learning approaches:
 
-This project implements a comprehensive anomaly detection system for time series data using two complementary deep learning approaches:
+LSTM AutoEncoder — Reconstruction-based anomaly detection
 
-1. **LSTM AutoEncoder** - Reconstruction-based anomaly detection
-2. **Forecasting LSTM** - Prediction-based anomaly detection
+Forecasting LSTM — Prediction-based anomaly detection
 
-Designed for the **CMAPSS (Commercial Modular Aero-Propulsion System Simulation)** dataset, it enables aircraft engine health monitoring, anomaly detection, and early failure prediction.
+Designed specifically for the CMAPSS (Commercial Modular Aero-Propulsion System Simulation) dataset, this system enables aircraft engine health monitoring, anomaly detection, and early failure prediction.
+
+The CMAPSS dataset consists of multi-sensor time series data collected from multiple turbofan engines operating under various conditions. Each engine’s operational cycle is represented by sensor readings capturing physical parameters such as temperature, pressure, fan speed, and vibration levels.
+
+Number of Sensors: 21 sensor measurements per time step
+
+Sensor Types: Include but are not limited to:
+
+Total temperature at fan inlet
+
+Total pressure at fan inlet
+
+Fan speed
+
+Core speed
+
+Turbine inlet temperature
+
+Fuel flow
+
+Static pressure
+
+Vibration measurements
+
+Data Characteristics:
+
+Variable-length sequences representing engine life cycles
+
+Multiple operating conditions and fault modes
+
+Sensor readings sampled at regular intervals
+
+By leveraging these detailed sensor readings, the system captures complex temporal patterns and dependencies to accurately detect anomalies indicating potential engine degradation or failure.
 
 ---
 
@@ -240,3 +272,4 @@ Contributions are welcome! Please open an issue or submit a pull request with su
 ## 📞 Contact
 
 For questions or collaboration opportunities, please reach out via GitHub Issues or email.
+
