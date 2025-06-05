@@ -54,13 +54,13 @@ By leveraging these detailed sensor readings, the system captures complex tempor
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│                    DATA PIPELINE                                │
+│                          DATA PIPELINE                          │
 ├─────────────────────────────────────────────────────────────────┤
-│  CMAPSSDataLoader → CMAPSSPreprocessor → Feature Selection      │
+│         DataLoader → DataPreprocessor → Feature Selection       │
 └─────────────────────────────────────────────────────────────────┘
                                ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                  DUAL MODEL APPROACH                            │
+│                     DUAL MODEL APPROACH                         │
 ├─────────────────────┬───────────────────────────────────────────┤
 │  AUTOENCODER BRANCH │           FORECASTER BRANCH               │
 │                     │                                           │
@@ -72,7 +72,7 @@ By leveraging these detailed sensor readings, the system captures complex tempor
 ┌─────────────────────────────────────────────────────────────────┐
 │              ANALYSIS & DEPLOYMENT                              │
 ├─────────────────────────────────────────────────────────────────┤
-│  CMAPSSAnomalyAnalyzer → ModelManager → Streamlit App          │
+│  AnomalyAnalyzer → ModelManager → Streamlit App          │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -82,8 +82,8 @@ By leveraging these detailed sensor readings, the system captures complex tempor
 
 ### Phase 1: Data Ingestion and Preprocessing
 
-* **CMAPSSDataLoader**: Loads and structures the dataset.
-* **CMAPSSPreprocessor**: Cleans and normalizes data; generates sequences.
+* **DataLoader**: Loads and structures the dataset.
+* **DataPreprocessor**: Cleans and normalizes data; generates sequences.
 
 ### Phase 2: Feature Engineering and Selection
 
@@ -104,8 +104,8 @@ By leveraging these detailed sensor readings, the system captures complex tempor
 
 ### Phase 4: Analysis and Monitoring
 
-* **CMAPSSPrognosticHealthMonitor**: Full health evaluation.
-* **CMAPSSAnomalyAnalyzer**: Model testing, performance comparison.
+* **PrognosticHealthMonitor**: Full health evaluation.
+* **AnomalyAnalyzer**: Model testing, performance comparison.
 
 ### Phase 5: Visualization and Reporting
 
@@ -137,14 +137,14 @@ By leveraging these detailed sensor readings, the system captures complex tempor
 pip install -r requirements.txt
 ```
 
-### 2. Run Model Training
+### 2. Run Model Testing 
 
 ```python
 # AutoEncoder
-python train_autoencoder.py
+python src/autoencoder_anomaly_predictor_test.py.py
 
 # Forecaster
-python train_forecaster.py
+python forecaster_anomaly_predictor_test.py
 ```
 
 ### 3. Run Anomaly Detection
