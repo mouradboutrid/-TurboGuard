@@ -15,29 +15,29 @@ from app.autoencoder_anomaly_detector_app import AutoencoderAnomalyPredictor
 
 MODEL_PATHS = {
     'forecasting': {
-        'model': "/content/cmapss_analysis_results/saved_models/lstm_model_20250529_005930.h5",
-        'config': "/content/cmapss_analysis_results/config/analysis_config_20250529_005930.json"
+        'model': "saved_models/lstm_model_20250529_005930.h5",
+        'config': "saved_models/analysis_config_20250529_005930.json"
     },
     'autoencoder': {
         'FD001': {
-            'autoencoder': "/content/models/FD001/autoencoder.keras",
-            'encoder': "/content/models/FD001/encoder.keras",
-            'config': "/content/models/FD001/config.json"
+            'autoencoder': "models/FD001/autoencoder.keras",
+            'encoder': "models/FD001/encoder.keras",
+            'config': "models/FD001/config.json"
         },
         'FD002': {
-            'autoencoder': "/content/models/FD002/autoencoder.keras",
-            'encoder': "/content/models/FD002/encoder.keras",
-            'config': "/content/models/FD002/config.json"
+            'autoencoder': "models/FD002/autoencoder.keras",
+            'encoder': "models/FD002/encoder.keras",
+            'config': "models/FD002/config.json"
         },
         'FD003': {
-            'autoencoder': "/content/models/FD003/autoencoder.keras",
-            'encoder': "/content/models/FD003/encoder.keras",
-            'config': "/content/models/FD003/config.json"
+            'autoencoder': "models/FD003/autoencoder.keras",
+            'encoder': "models/FD003/encoder.keras",
+            'config': "models/FD003/config.json"
         },
         'FD004': {
-            'autoencoder': "/content/models/FD004/autoencoder.keras",
-            'encoder': "/content/models/FD004/encoder.keras",
-            'config': "/content/models/FD004/config.json"
+            'autoencoder': "models/FD004/autoencoder.keras",
+            'encoder': "models/FD004/encoder.keras",
+            'config': "models/FD004/config.json"
         }
     }
 }
