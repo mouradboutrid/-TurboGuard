@@ -24,7 +24,7 @@ Overview
 TurboGuard implements a comprehensive system for turbofan engine health monitoring through two synergistic LSTM-based methods:
 
 - **LSTM AutoEncoder**: Learns to reconstruct input sequences and flags deviations as anomalies.
-- **Forecasting LSTM**: Predicts future values to detect abnormal trends and estimate Remaining Useful Life (RUL).
+- **Forecasting LSTM**: Predicts future values to detect abnormal trends.
 
 The framework enables proactive maintenance, minimizes downtime, and optimizes operational efficiency.
 
@@ -47,7 +47,7 @@ Designed for both research and production environments with pluggable components
 Supports robust normalization, dynamic sequence generation, and feature selection.
 
 🚨 **Multiple Detection Strategies**  
-Uses LSTM reconstruction errors, forecasting deviations, and statistical thresholds.
+Uses LSTM reconstruction errors, forecasting deviations, and statistical also dynamical thresholds.
 
 📈 **Detailed Evaluation Metrics**  
 Includes MSE, MAE, RMSE, F1-score, precision-recall, and anomaly lead-time.
