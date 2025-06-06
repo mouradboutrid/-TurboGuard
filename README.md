@@ -11,7 +11,7 @@ A deep learning framework for predictive maintenance and anomaly detection in tu
 TurboGuard implements a comprehensive anomaly detection and forecasting system for turbofan engines by leveraging two complementary deep learning approaches:
 
 - **LSTM AutoEncoder**: Reconstruction-based anomaly detection through sequence-to-sequence learning
-- **Forecasting LSTM**: Next-step prediction for early fault detection and remaining useful life estimation
+- **Forecasting LSTM**: Next-step prediction for early fault detection
 
 The system provides robust, interpretable insights into engine health, enabling proactive maintenance strategies and reducing operational costs.
 
