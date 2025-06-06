@@ -1,41 +1,53 @@
 Tutorials
 =========
-This section provides step-by-step tutorials to help you get started with TurboGuard quickly and effectively.
+
+Welcome to the TurboGuard tutorials! This section will guide you through everything you need to know to get started with TurboGuard, from installation to building your first predictive maintenance model.
+
 .. toctree::
    :maxdepth: 2
+   :numbered:
+
    installation
    quickstart
    first_model
-Tutorial Overview
+
+What You'll Learn
 -----------------
-The tutorials are designed to take you from installation to building your first anomaly detection model:
-1. **Installation**: Set up your development environment with all necessary dependencies
-2. **Quick Start**: Get TurboGuard running in minutes with the interactive dashboard
-3. **First Model**: Build and train your first LSTM AutoEncoder model for anomaly detection
+
+📚 **Installation**: Set up TurboGuard on your system with all dependencies
+
+🚀 **Quick Start**: Get TurboGuard running in minutes with our streamlined setup
+
+🤖 **First Model**: Build and train your first LSTM AutoEncoder for anomaly detection
+
 Prerequisites
 -------------
-Before starting the tutorials, ensure you have:
-- Python 3.8 or higher installed
-- Basic understanding of machine learning concepts
-- Familiarity with time series data
-- 6GB+ RAM for model training (recommended)
-Learning Path
+
+Before starting these tutorials, you should have:
+
+- Basic knowledge of Python programming
+- Familiarity with machine learning concepts
+- Understanding of time series data (helpful but not required)
+- Python 3.8+ installed on your system
+
+Tutorial Path
 -------------
-If you're new to TurboGuard, we recommend following the tutorials in order:
-.. mermaid::
-   graph LR
-       A[Installation] --> B[Quick Start]
-       B --> C[First Model]
-       C --> D[Advanced Examples]
-       
-       style A fill:#e1f5fe
-       style B fill:#f3e5f5
-       style C fill:#fff3e0
-       style D fill:#e8f5e8
-Need Help?
-----------
-If you encounter any issues while following the tutorials:
-1. Check the :doc:`../development/troubleshooting` section
-2. Review the :doc:`../api/index` for detailed API documentation
-3. Browse the :doc:`../examples/index` for more comprehensive examples
-4. Submit an issue on our `GitHub repository <https://github.com/mouradboutrid/TurboGuard/issues>`_
+
+We recommend following the tutorials in order:
+
+1. **Installation** - Get TurboGuard installed and verify your setup
+2. **Quick Start** - Launch the dashboard and explore the interface  
+3. **First Model** - Train your first anomaly detection model
+
+Each tutorial builds on the previous one, so completing them in sequence will give you the most comprehensive understanding of TurboGuard.
+
+Getting Help
+------------
+
+If you encounter any issues while following these tutorials:
+
+- Check the troubleshooting sections in each tutorial
+- Visit our `GitHub Issues <https://github.com/mouradboutrid/-TurboGuard/issues>`_
+- Refer to the :doc:`../api/index` for detailed API documentation
+
+Let's get started! 🎯
