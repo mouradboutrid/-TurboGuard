@@ -13,11 +13,7 @@ TurboGuard Documentation
    :target: https://streamlit.io/
    :alt: Streamlit
 
-.. image:: https://img.shields.io/badge/License-MIT-green.svg
-   :target: https://opensource.org/licenses/MIT
-   :alt: License
-
-**TurboGuard** is a state-of-the-art deep learning framework for predictive maintenance and anomaly detection in turbofan engines, built on dual LSTM architectures and powered by the CMAPSS dataset.
+**TurboGuard** is a learning framework for predictive maintenance and anomaly detection in turbofan engines, built on dual LSTM architectures and powered by the CMAPSS dataset.
 
 
 
