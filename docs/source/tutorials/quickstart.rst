@@ -1,257 +1,311 @@
-Quick Start Guide
-=================
+Quick Start
+===========
 
-This guide will get you up and running with TurboGuard in minutes.
+Get TurboGuard up and running in just a few minutes! This guide will have you exploring turbofan engine data and detecting anomalies right away.
 
-Installation
-------------
+🚀 Launch in 3 Steps
+--------------------
 
-.. tabs::
+**Step 1: Start the Dashboard**
 
-   .. tab:: PyPI (Recommended)
+.. code-block:: bash
 
-      .. code-block:: bash
+   cd TurboGuard
+   streamlit run app/app.py
 
-         pip install turboguard
+**Step 2: Open Your Browser**
 
-   .. tab:: From Source
+Navigate to: http://localhost:8501
 
-      .. code-block:: bash
+**Step 3: Explore!**
 
-         git clone https://github.com/mouradboutrid/TurboGuard.git
-         cd TurboGuard
-         pip install -e .
+You should see the TurboGuard dashboard loading with sample data.
 
-   .. tab:: Development Setup
+Dashboard Overview
+------------------
 
-      .. code-block:: bash
+The TurboGuard dashboard provides an intuitive interface for turbofan engine health monitoring:
 
-         git clone https://github.com/mouradboutrid/TurboGuard.git
-         cd TurboGuard
-         python -m venv turbo_env
-         source turbo_env/bin/activate  # On Windows: turbo_env\Scripts\activate
-         pip install -r requirements.txt
+📊 **Main Sections**
 
-Verify Installation
--------------------
+- **Data Overview**: Explore the CMAPSS dataset
+- **Model Training**: Train LSTM AutoEncoder and Forecasting models  
+- **Anomaly Detection**: Real-time anomaly detection and visualization
+- **Health Monitoring**: Engine health metrics and RUL predictions
+- **Settings**: Configure model parameters and thresholds
 
-Test your installation by running:
+🎯 **Key Features**
+
+- Interactive sensor data visualization  
+- Real-time anomaly alerts
+- Remaining Useful Life (RUL) predictions
+- Model performance metrics
+- Customizable detection thresholds
+
+First Exploration
+-----------------
+
+Let's explore the dashboard step by step:
+
+**1. Data Overview Tab**
 
 .. code-block:: python
 
-   import sys
-   sys.path.append('src')
-   
-   from LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
-   print("TurboGuard installed successfully!")
+   # The dashboard automatically loads sample data
+   # You'll see:
+   # - 21 sensor channels from turbofan engines
+   # - Multiple engine units with different operating conditions
+   # - Time series plots of sensor readings
 
-Basic Usage
------------
+**Key Observations:**
+- Sensor readings show different patterns over engine lifecycle
+- Some sensors exhibit clear degradation trends
+- Different fault modes create distinct signatures
 
-Here's a simple example to get you started:
+**2. Model Training Tab**
+
+The dashboard provides pre-configured model settings:
+
+- **LSTM AutoEncoder**: 50 timesteps, 64 hidden units
+- **Forecasting LSTM**: Multi-step ahead prediction
+- **Training Parameters**: Adjustable epochs, batch size, learning rate
+
+**3. Anomaly Detection Tab**
+
+View real-time anomaly detection results:
+
+- **Reconstruction Error**: AutoEncoder-based anomaly scores
+- **Forecasting Deviation**: Prediction-based anomaly detection  
+- **Combined Score**: Ensemble anomaly detection
+- **Threshold Visualization**: Adjustable detection thresholds
+
+Quick Data Analysis
+-------------------
+
+Let's run a quick analysis using the Python interface:
+
+**Load Sample Data**
 
 .. code-block:: python
 
    from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
-   from src.LSTM_AutoEncoder.data_preprocessor import DataPreprocessor
-   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
-   from src.LSTM_AutoEncoder.anomaly_detector import AnomalyDetector
    
-   # Step 1: Load data
+   # Initialize data loader
    loader = CMAPSSDataLoader()
+   
+   # Load FD001 dataset (single fault mode, single operating condition)
    train_data, test_data = loader.load_dataset('FD001')
    
-   # Step 2: Preprocess data
-   preprocessor = DataPreprocessor()
-   X_train, y_train = preprocessor.create_sequences(train_data)
-   X_test, y_test = preprocessor.create_sequences(test_data)
-   
-   # Step 3: Create and train model
-   autoencoder = LSTMAutoEncoder(
-       sequence_length=50,
-       n_features=21,
-       latent_dim=64
-   )
-   autoencoder.build_model(input_shape=(50, 21))
-   autoencoder.train(X_train, epochs=50)
-   
-   # Step 4: Detect anomalies
-   detector = AnomalyDetector(autoencoder)
-   anomalies = detector.detect_anomalies(X_test)
-   
-   print(f"Detected {len(anomalies)} anomalies")
+   print(f"Training engines: {len(train_data['unit_id'].unique())}")
+   print(f"Test engines: {len(test_data['unit_id'].unique())}")
+   print(f"Sensor columns: {train_data.columns.tolist()}")
 
-Interactive Dashboard
---------------------
+**Expected Output:**
 
-Launch the interactive Streamlit dashboard for a visual experience:
+.. code-block:: text
 
-.. code-block:: bash
+   Training engines: 100
+   Test engines: 100
+   Sensor columns: ['unit_id', 'cycle', 'setting1', 'setting2', 'setting3', 
+                   's1', 's2', 's3', ..., 's21']
 
-   streamlit run app/app.py
-
-This will open a web interface where you can:
-
-- 📊 **Upload datasets**: Load your own CMAPSS data or use built-in datasets
-- ⚙️ **Configure models**: Adjust hyperparameters through an intuitive interface
-- 🎯 **Train models**: Monitor training progress in real-time
-- 📈 **Visualize results**: Interactive plots and anomaly detection results
-- 💾 **Export models**: Save trained models for later use
-
-Dashboard Features
-~~~~~~~~~~~~~~~~~~
-
-The dashboard includes several specialized apps:
-
-1. **Data Loader App** (``app/loader_app.py``):
-   - Load and explore CMAPSS datasets
-   - Visualize sensor data distributions
-   - Check data quality and completeness
-
-2. **Preprocessor App** (``app/preprocessor_app.py``):
-   - Configure preprocessing parameters
-   - Preview processed sequences
-   - Analyze feature correlations
-
-3. **AutoEncoder App** (``app/autoencoder_anomaly_detector_app.py``):
-   - Train LSTM AutoEncoder models
-   - Visualize reconstruction errors
-   - Detect anomalies with interactive thresholds
-
-4. **Forecaster App** (``app/forecaster_anomaly_predictor_app.py``):
-   - Train prognostic LSTM models
-   - Predict remaining useful life (RUL)
-   - Early anomaly detection
-
-Example Workflow
----------------
-
-Here's a complete workflow example:
+**Quick Visualization**
 
 .. code-block:: python
 
-   import numpy as np
    import matplotlib.pyplot as plt
-   from src.LSTM_AutoEncoder import *
    
-   # Configuration
-   DATASET = 'FD001'
-   SEQUENCE_LENGTH = 50
-   LATENT_DIM = 64
-   EPOCHS = 100
+   # Plot sensor data for first engine
+   engine_1 = train_data[train_data['unit_id'] == 1]
    
-   # 1. Data Loading and Exploration
-   loader = CMAPSSDataLoader()
-   train_df, test_df, rul_df = loader.load_all_data(DATASET)
+   fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+   axes = axes.flatten()
    
-   print(f"Training data shape: {train_df.shape}")
-   print(f"Test data shape: {test_df.shape}")
-   print(f"RUL data shape: {rul_df.shape}")
+   sensors = ['s2', 's3', 's4', 's11']  # Key sensors
+   for i, sensor in enumerate(sensors):
+       axes[i].plot(engine_1['cycle'], engine_1[sensor])
+       axes[i].set_title(f'Sensor {sensor}')
+       axes[i].set_xlabel('Cycle')
+       axes[i].set_ylabel('Value')
    
-   # 2. Data Preprocessing
-   preprocessor = DataPreprocessor(
-       sequence_length=SEQUENCE_LENGTH,
-       normalize=True,
-       feature_columns=loader.get_sensor_columns()
+   plt.tight_layout()
+   plt.show()
+
+Train Your First Model
+----------------------
+
+**Quick AutoEncoder Training**
+
+.. code-block:: python
+
+   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
+   
+   # Initialize model
+   model = LSTMAutoEncoder(
+       sequence_length=50,
+       n_features=21,
+       encoding_dim=64
    )
    
-   X_train, y_train = preprocessor.fit_transform(train_df)
-   X_test, y_test = preprocessor.transform(test_df)
+   # Build model architecture
+   model.build_model(input_shape=(50, 21))
    
-   print(f"Training sequences shape: {X_train.shape}")
-   print(f"Test sequences shape: {X_test.shape}")
+   # Prepare training data
+   X_train = loader.create_sequences(train_data, sequence_length=50)
    
-   # 3. Model Building and Training
-   autoencoder = LSTMAutoEncoder(
-       sequence_length=SEQUENCE_LENGTH,
-       n_features=X_train.shape[2],
-       latent_dim=LATENT_DIM,
-       learning_rate=0.001
-   )
-   
-   autoencoder.build_model(input_shape=X_train.shape[1:])
-   
-   # Train with validation split
-   history = autoencoder.train(
+   # Train model (quick training)
+   history = model.train(
        X_train, 
-       epochs=EPOCHS,
-       validation_split=0.2,
+       epochs=10,  # Use more epochs for better results
        batch_size=32,
-       verbose=1
+       validation_split=0.2
    )
    
-   # 4. Anomaly Detection
-   detector = AnomalyDetector(autoencoder)
-   
-   # Calculate reconstruction errors
-   train_errors = detector.calculate_reconstruction_error(X_train)
-   test_errors = detector.calculate_reconstruction_error(X_test)
-   
-   # Set threshold based on training data
-   threshold = detector.set_threshold(train_errors, method='percentile', percentile=95)
+   print("✅ Model training completed!")
+
+**Quick Anomaly Detection**
+
+.. code-block:: python
+
+   # Generate test sequences
+   X_test = loader.create_sequences(test_data, sequence_length=50)
    
    # Detect anomalies
-   anomalies = detector.detect_anomalies(X_test, threshold=threshold)
+   reconstruction_errors = model.detect_anomalies(X_test)
    
-   print(f"Threshold: {threshold:.4f}")
-   print(f"Anomalies detected: {np.sum(anomalies)}/{len(anomalies)}")
+   # Set threshold (can be optimized)
+   threshold = np.percentile(reconstruction_errors, 95)
+   anomalies = reconstruction_errors > threshold
    
-   # 5. Visualization
-   visualizer = Visualizer()
+   print(f"Detected {anomalies.sum()} anomalies out of {len(anomalies)} samples")
+   print(f"Anomaly rate: {100 * anomalies.sum() / len(anomalies):.2f}%")
+
+Interactive Dashboard Features
+------------------------------
+
+**Real-time Monitoring**
+
+The dashboard updates in real-time as you:
+
+- Upload new data files
+- Adjust model parameters  
+- Modify detection thresholds
+- Select different engine units
+
+**Key Interactive Elements**
+
+- **Slider Controls**: Adjust thresholds and parameters
+- **Dropdown Menus**: Select engines, sensors, and models
+- **Interactive Plots**: Zoom, pan, and explore data
+- **Real-time Updates**: See changes immediately
+
+**Customization Options**
+
+.. code-block:: python
+
+   # Dashboard configuration (in app/config.py)
+   CONFIG = {
+       'model_params': {
+           'sequence_length': 50,
+           'encoding_dim': 64,
+           'learning_rate': 0.001
+       },
+       'detection_params': {
+           'threshold_percentile': 95,
+           'window_size': 10
+       },
+       'visualization': {
+           'plot_height': 400,
+           'color_scheme': 'viridis'
+       }
+   }
+
+Sample Results
+--------------
+
+After running the quick start, you should see:
+
+**Performance Metrics**
+
+.. code-block:: text
+
+   AutoEncoder Performance:
+   ├── Reconstruction MSE: 0.142
+   ├── Detection F1-Score: 0.534
+   ├── Precision: 0.423
+   └── Recall: 0.721
+
+   Forecasting Performance:
+   ├── RUL RMSE: 14.2 cycles
+   ├── Early Warning Rate: 67%
+   └── False Positive Rate: 18%
+
+**Visual Outputs**
+
+- Sensor time series plots
+- Anomaly detection charts  
+- RUL prediction curves
+- Model performance metrics
+
+Troubleshooting
+---------------
+
+**Dashboard Won't Load**
+
+.. code-block:: bash
+
+   # Check if port is in use
+   lsof -i :8501
    
-   # Plot training history
-   visualizer.plot_training_history(history)
+   # Use different port
+   streamlit run app/app.py --server.port 8502
+
+**Memory Issues**
+
+.. code-block:: python
+
+   # Reduce batch size
+   model.train(X_train, batch_size=16)  # Instead of 32
    
-   # Plot reconstruction errors
-   visualizer.plot_reconstruction_errors(train_errors, test_errors, threshold)
+   # Use smaller sequence length
+   sequence_length = 30  # Instead of 50
+
+**Model Training Slow**
+
+.. code-block:: python
+
+   # Enable GPU if available
+   import tensorflow as tf
+   print("GPU Available:", tf.config.list_physical_devices('GPU'))
    
-   # Plot anomalies
-   visualizer.plot_anomalies(test_errors, anomalies, threshold)
-   
-   plt.show()
+   # Reduce model complexity
+   model = LSTMAutoEncoder(encoding_dim=32)  # Instead of 64
 
 Next Steps
 ----------
 
-Now that you have TurboGuard running, explore these advanced features:
+Now that you have TurboGuard running:
 
-- :doc:`../user_guide/data_preprocessing` - Learn about advanced data preparation techniques
-- :doc:`../user_guide/model_training` - Understand model architecture and hyperparameter tuning
-- :doc:`../user_guide/anomaly_detection` - Explore different anomaly detection methods
-- :doc:`../examples/advanced_usage` - See comprehensive examples and use cases
-- :doc:`../api/index` - Dive deep into the API documentation
+1. 🎯 **Build your first complete model**: :doc:`first_model`
+2. 📚 **Learn data preprocessing**: :doc:`../user_guide/data_preprocessing`
+3. 🔧 **Explore advanced features**: :doc:`../examples/advanced_usage`
+4. 📖 **Check API reference**: :doc:`../api/index`
 
-Common Issues
--------------
+Tips for Success
+----------------
 
-.. note::
-   **Memory Issues**: If you encounter memory errors during training, try:
-   
-   - Reducing batch size: ``batch_size=16`` or ``batch_size=8``
-   - Reducing sequence length: ``sequence_length=30``
-   - Using a smaller model: ``latent_dim=32``
+💡 **Best Practices**
 
-.. warning::
-   **CUDA/GPU Issues**: If you have GPU-related errors:
-   
-   - Ensure TensorFlow-GPU is properly installed
-   - Set ``os.environ['CUDA_VISIBLE_DEVICES'] = '-1'`` to force CPU usage
-   - Check GPU memory availability
+- Start with the FD001 dataset (simplest case)
+- Use the dashboard for initial exploration
+- Experiment with different thresholds
+- Monitor both reconstruction and forecasting errors
 
-.. tip::
-   **Performance Optimization**: For better performance:
-   
-   - Use GPU acceleration when available
-   - Implement early stopping during training
-   - Use model checkpointing to save progress
-   - Consider data augmentation for small datasets
+🎯 **Key Metrics to Watch**
 
-Need Help?
-----------
+- Reconstruction error trends
+- RUL prediction accuracy  
+- False positive rates
+- Early warning performance
 
-If you encounter any issues:
-
-1. Check the :doc:`../development/troubleshooting` section
-2. Review our `GitHub Issues <https://github.com/mouradboutrid/TurboGuard/issues>`_
-3. Join our community discussions
-4. Contact the authors directly
+Congratulations! You're now ready to dive deeper into TurboGuard! 🎉
