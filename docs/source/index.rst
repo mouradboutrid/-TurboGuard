@@ -62,7 +62,7 @@ Quick Start
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/mouradboutrid/TurboGuard.git
+   git clone https://github.com/mouradboutrid/-TurboGuard.git
    cd TurboGuard
 
    # Install dependencies
@@ -84,8 +84,10 @@ Quick Start
    model.build_model(input_shape=(50, 21))
    model.train(data)
 
-Documentation Structure
------------------------
+Getting Started Tutorials
+-------------------------
+
+Follow our comprehensive tutorial series to master TurboGuard:
 
 .. toctree::
    :maxdepth: 2
@@ -95,6 +97,30 @@ Documentation Structure
    tutorials/installation
    tutorials/quickstart
    tutorials/first_model
+
+📚 **Tutorial Overview:**
+
+**Installation Tutorial** - Complete setup guide with system requirements, dependency installation, GPU configuration, and troubleshooting for common installation issues.
+
+**Quick Start Tutorial** - Get TurboGuard running in 3 steps! Launch the interactive dashboard, explore the CMAPSS dataset, and run your first anomaly detection in minutes.
+
+**First Model Tutorial** - Build your complete first model from scratch:
+
+- 🔧 **Data Preparation**: Load and preprocess CMAPSS FD001 dataset
+- 🤖 **LSTM AutoEncoder**: Build 64-dimensional encoder-decoder architecture  
+- 📊 **Training Pipeline**: Train with 50 epochs, monitor validation metrics
+- 🚨 **Anomaly Detection**: Implement threshold-based anomaly detection
+- 📈 **Forecasting LSTM**: Build multi-step prediction model for RUL estimation
+- 💾 **Model Management**: Save, load, and version your trained models
+- 🎯 **Production Pipeline**: Create complete prediction function with preprocessing
+- 📊 **Visualization Dashboard**: Generate comprehensive 6-panel performance dashboard
+
+**What You'll Achieve:**
+- ✅ Functional LSTM AutoEncoder with <0.15 MSE reconstruction error
+- ✅ Forecasting model with <15 cycles RUL prediction RMSE  
+- ✅ Complete anomaly detection pipeline with >50% F1-score
+- ✅ Production-ready model saving and loading system
+- ✅ Interactive visualization dashboard for real-time monitoring
 
 .. toctree::
    :maxdepth: 2
