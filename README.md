@@ -1,3 +1,6 @@
+[![Documentation Status](https://turboguard.readthedocs.io/en/latest/)]([https://your-project.readthedocs.io/en/latest/?badge=latest](https://turboguard.readthedocs.io/en/latest/))
+
+
 # ✈️ TurboGuard: Turbofan Engine Anomaly Detection
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
