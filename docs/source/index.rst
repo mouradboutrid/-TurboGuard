@@ -256,9 +256,3 @@ Authors
 📧 ac.kassimi@edu.umi.ac.ma  
 🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
 
-Indices and Tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
