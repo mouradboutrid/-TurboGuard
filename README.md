@@ -157,12 +157,12 @@ streamlit run app/app.py
 
 #### 3. Programmatic Usage
 ```python
-from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
-from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
-from src.LSTM_AutoEncoder.anomaly_detector import AnomalyDetector
+from src.LSTMAutoEncoder.data_loader import DataLoader
+from src.LSTAutoEncoder.lstm_autoencoder import LSTMAutoEncoder
+from src.LSTMAutoEncoder.anomaly_detector import AnomalyDetector
 
 # Load and preprocess data
-loader = CMAPSSDataLoader()
+loader = DataLoader()
 data = loader.load_dataset('FD001')
 
 # Initialize and train AutoEncoder
@@ -213,7 +213,6 @@ anomalies = detector.detect_anomalies(test_data)
 - **False Positive Rate**: < 20% on normal operations
 
 ### Forecasting Model Performance
-- **Prediction Accuracy**: RMSE < 15 cycles for RUL estimation
 - **Early Detection**: 60%+ anomalies detected 20+ cycles before failure
 - **Multi-step Forecasting**: Maintains accuracy up to 50-step horizon
 
