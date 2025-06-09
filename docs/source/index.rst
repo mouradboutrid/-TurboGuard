@@ -15,9 +15,6 @@ TurboGuard Documentation
 
 **TurboGuard** is a deep learning framework for predictive maintenance and anomaly detection in turbofan engines, built on dual LSTM architectures using CMAPSS dataset.
 
-
-
-
 Overview
 --------
 
@@ -69,47 +66,45 @@ Quick Start
 
 .. code-block:: python
 
-   # Minimal example
-.. code-block:: python
-import numpy as np
-from data_loader import DataLoader
-from data_preprocessor import DataPreprocessor
-from lstm_autoencoder import LSTMAutoencoder
-from anomaly_detector import AnomalyDetector
+   import numpy as np
+   from data_loader import DataLoader
+   from data_preprocessor import DataPreprocessor
+   from lstm_autoencoder import LSTMAutoencoder
+   from anomaly_detector import AnomalyDetector
 
-# Load dataset (returns a dict with keys 'train', 'test', 'rul')
-loader = DataLoader(data_dir='/content/drive/MyDrive/CMAPSSData')
-dataset = loader.load_dataset('FD001')
+   # Load dataset (returns a dict with keys 'train', 'test', 'rul')
+   loader = DataLoader(data_dir='/content/drive/MyDrive/CMAPSSData')
+   dataset = loader.load_dataset('FD001')
 
-train_raw = dataset['train']  # pandas DataFrame
-test_raw = dataset['test']    # pandas DataFrame
-rul_raw = dataset['rul']      # pandas DataFrame
+   train_raw = dataset['train']  # pandas DataFrame
+   test_raw = dataset['test']    # pandas DataFrame
+   rul_raw = dataset['rul']      # pandas DataFrame
 
-# Preprocess the train and test data
-preprocessor = DataPreprocessor()
-train_processed = preprocessor.preprocess_data(train_raw, calculate_rul=True, normalize=True)
-test_processed = preprocessor.preprocess_data(test_raw, calculate_rul=False, normalize=True)
+   # Preprocess the train and test data
+   preprocessor = DataPreprocessor()
+   train_processed = preprocessor.preprocess_data(train_raw, calculate_rul=True, normalize=True)
+   test_processed = preprocessor.preprocess_data(test_raw, calculate_rul=False, normalize=True)
 
-# Create sequences from preprocessed data
-X_train, y_train = preprocessor.create_sequences(train_processed, sequence_length=50, target_col='RUL')
-X_test = preprocessor.create_sequences(test_processed, sequence_length=50)
+   # Create sequences from preprocessed data
+   X_train, y_train = preprocessor.create_sequences(train_processed, sequence_length=50, target_col='RUL')
+   X_test = preprocessor.create_sequences(test_processed, sequence_length=50)
 
-print("X_train shape:", X_train.shape)
-print("X_test shape:", X_test.shape)
+   print("X_train shape:", X_train.shape)
+   print("X_test shape:", X_test.shape)
 
-# Build and train the LSTM Autoencoder
-autoencoder = LSTMAutoencoder()
-autoencoder.build_model(input_shape=(X_train.shape[1], X_train.shape[2]))
-autoencoder.train(X_train, epochs=50, batch_size=32)
+   # Build and train the LSTM Autoencoder
+   autoencoder = LSTMAutoencoder()
+   autoencoder.build_model(input_shape=(X_train.shape[1], X_train.shape[2]))
+   autoencoder.train(X_train, epochs=50, batch_size=32)
 
-# Detect anomalies on test set
-detector = AnomalyDetector()
-anomaly_scores, anomaly_flags, threshold = detector.detect_lstm_anomalies(X_test, autoencoder)
+   # Detect anomalies on test set
+   detector = AnomalyDetector()
+   anomaly_scores, anomaly_flags, threshold = detector.detect_lstm_anomalies(X_test, autoencoder)
 
-print(f"Anomaly threshold: {threshold:.4f}")
-print(f"Detected {np.sum(anomaly_flags)} anomalies out of {len(anomaly_flags)} test samples")
-print(f"Anomaly rate: {np.sum(anomaly_flags)/len(anomaly_flags)*100:.2f}%"))
-...
+   print(f"Anomaly threshold: {threshold:.4f}")
+   print(f"Detected {np.sum(anomaly_flags)} anomalies out of {len(anomaly_flags)} test samples")
+   print(f"Anomaly rate: {np.sum(anomaly_flags)/len(anomaly_flags)*100:.2f}%")
+
 Getting Started Tutorials
 -------------------------
 
@@ -255,4 +250,3 @@ Authors
 *AI Engineering Student*  
 📧 ac.kassimi@edu.umi.ac.ma  
 🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
-
