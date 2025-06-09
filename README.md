@@ -1,6 +1,3 @@
-[![Documentation](https://img.shields.io/badge/docs-readthedocs-blue)](https://turboguard.readthedocs.io/en/latest/)
-
-
 # ✈️ TurboGuard: Turbofan Engine Anomaly Detection
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -248,8 +245,7 @@ anomalies = detector.detect_anomalies(test_data)
 ## 📚 Documentation
 
 - **Technical Report**: `Damage_Propagation_Modeling.pdf`
-- **API Documentation**: 
-- **User Guide**: 
+- **Readthedocs Documentation**:  [![Documentation](https://img.shields.io/badge/docs-readthedocs-blue)](https://turboguard.readthedocs.io/en/latest/) 
 
 ## 🤝 Contributing
 
