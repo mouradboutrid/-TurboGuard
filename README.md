@@ -118,7 +118,7 @@ TurboGuard/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/mouradboutrid/-TurboGuard.git
+   git clone https://github.com/mouradboutrid/TurboGuard.git
    cd TurboGuard
    ```
 
