@@ -188,10 +188,12 @@ autoencoder.build_model(input_shape=(X_train.shape[1], X_train.shape[2]))
 autoencoder.train(X_train, epochs=50, batch_size=32)
 
 # Detect anomalies on test set
-detector = AnomalyDetector(autoencoder)
-anomalies = detector.detect_anomalies(X_test)
+detector = AnomalyDetector()
+anomaly_scores, anomaly_flags, threshold = detector.detect_lstm_anomalies(X_test, autoencoder)
 
-print(f"Detected {len(anomalies)} anomalies in test data")
+print(f"Anomaly threshold: {threshold:.4f}")
+print(f"Detected {np.sum(anomaly_flags)} anomalies out of {len(anomaly_flags)} test samples")
+print(f"Anomaly rate: {np.sum(anomaly_flags)/len(anomaly_flags)*100:.2f}%")
 ```
 
 ## 🛠️ Core Components
