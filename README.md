@@ -239,7 +239,7 @@ print(f"Anomaly rate: {np.sum(anomaly_flags)/len(anomaly_flags)*100:.2f}%")
 
 ## 🔧 Advanced Features
 
-### Multi-Modal Anomaly Detection
+### Multi-Model Anomaly Detection
 - **Reconstruction-based**: LSTM AutoEncoder error analysis
 - **Prediction-based**: Forecasting deviation detection
 - **Statistical Methods**: Distribution-based anomaly scoring
