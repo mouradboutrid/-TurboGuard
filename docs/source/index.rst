@@ -70,7 +70,7 @@ Quick Start
 .. code-block:: python
 
    # Minimal example
-
+.. code-block:: python
 import numpy as np
 from data_loader import DataLoader
 from data_preprocessor import DataPreprocessor
@@ -109,7 +109,7 @@ anomaly_scores, anomaly_flags, threshold = detector.detect_lstm_anomalies(X_test
 print(f"Anomaly threshold: {threshold:.4f}")
 print(f"Detected {np.sum(anomaly_flags)} anomalies out of {len(anomaly_flags)} test samples")
 print(f"Anomaly rate: {np.sum(anomaly_flags)/len(anomaly_flags)*100:.2f}%"))
-
+...
 Getting Started Tutorials
 -------------------------
 
