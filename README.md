@@ -158,7 +158,7 @@ streamlit run app/app.py
 #### 3. Programmatic Usage
 ```python
 from src.LSTM_AutoEncoder.data_loader import DataLoader
-from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
+from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoencoder
 from src.LSTM_AutoEncoder.anomaly_detector import AnomalyDetector
 
 # Load and preprocess data
