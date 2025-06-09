@@ -157,22 +157,41 @@ streamlit run app/app.py
 
 #### 3. Programmatic Usage
 ```python
-from src.LSTM_AutoEncoder.data_loader import DataLoader
-from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoencoder
-from src.LSTM_AutoEncoder.anomaly_detector import AnomalyDetector
+from data_loader import DataLoader
+from data_preprocessor import DataPreprocessor
+from lstm_autoencoder import LSTMAutoencoder
+from anomaly_detector import AnomalyDetector
 
-# Load and preprocess data
-loader = DataLoader()
-data = loader.load_dataset('FD001')
+# Load dataset (returns a dict with keys 'train', 'test', 'rul')
+loader = DataLoader(data_dir='/content/drive/MyDrive/CMAPSSData')
+dataset = loader.load_dataset('FD001')
 
-# Initialize and train AutoEncoder
-autoencoder = LSTMAutoEncoder()
-autoencoder.build_model(input_shape=(50, 21))
-autoencoder.train(data)
+train_raw = dataset['train']  # pandas DataFrame
+test_raw = dataset['test']    # pandas DataFrame
+rul_raw = dataset['rul']      # pandas DataFrame
 
-# Detect anomalies
+# Preprocess the train and test data
+preprocessor = DataPreprocessor()
+train_processed = preprocessor.preprocess_data(train_raw, calculate_rul=True, normalize=True)
+test_processed = preprocessor.preprocess_data(test_raw, calculate_rul=False, normalize=True)
+
+# Create sequences from preprocessed data
+X_train, y_train = preprocessor.create_sequences(train_processed, sequence_length=50, target_col='RUL')
+X_test = preprocessor.create_sequences(test_processed, sequence_length=50)
+
+print("X_train shape:", X_train.shape)
+print("X_test shape:", X_test.shape)
+
+# Build and train the LSTM Autoencoder
+autoencoder = LSTMAutoencoder()
+autoencoder.build_model(input_shape=(X_train.shape[1], X_train.shape[2]))
+autoencoder.train(X_train, epochs=50, batch_size=32)
+
+# Detect anomalies on test set
 detector = AnomalyDetector(autoencoder)
-anomalies = detector.detect_anomalies(test_data)
+anomalies = detector.detect_anomalies(X_test)
+
+print(f"Detected {len(anomalies)} anomalies in test data")
 ```
 
 ## 🛠️ Core Components
