@@ -1,4 +1,4 @@
-[![Documentation Status](https://turboguard.readthedocs.io/en/latest/)]([https://your-project.readthedocs.io/en/latest/?badge=latest](https://turboguard.readthedocs.io/en/latest/))
+[![Documentation](https://img.shields.io/badge/docs-readthedocs-blue)](https://turboguard.readthedocs.io/en/latest/)
 
 
 # ✈️ TurboGuard: Turbofan Engine Anomaly Detection
