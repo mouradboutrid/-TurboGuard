@@ -9,16 +9,16 @@ System Requirements
 Before installing TurboGuard, ensure your system meets these requirements:
 
 **Operating System**
-- Windows 10/11
-- macOS 10.14+
-- Linux (Ubuntu 18.04+, CentOS 7+)
+- Windows
+- macOS 
+- Linux
 
 **Python**
 - Python 3.8 or higher
 - pip package manager
 
 **Hardware**
-- Minimum 8GB RAM (16GB recommended)
+- Minimum 6GB RAM (8GB recommended)
 - GPU support optional but recommended for training
 
 Installation Methods
@@ -31,7 +31,7 @@ Method 1: Install from GitHub (Recommended)
 
    .. code-block:: bash
 
-      git clone https://github.com/mouradboutrid/-TurboGuard.git
+      git clone https://github.com/mouradboutrid/TurboGuard.git
       cd TurboGuard
 
 2. **Create Virtual Environment**
@@ -60,7 +60,7 @@ For contributors or advanced users who want to modify the code:
 
 .. code-block:: bash
 
-   git clone https://github.com/mouradboutrid/-TurboGuard.git
+   git clone https://github.com/mouradboutrid/TurboGuard.git
    cd TurboGuard
    pip install -e .
 
@@ -148,7 +148,7 @@ Test your installation with these verification steps:
 .. code-block:: python
 
    from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
-   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
+   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoencoder
    from src.Forecasting_LSTM.forecasting_lstm import ForecastingLSTM
    
    print("✅ TurboGuard modules imported successfully!")
