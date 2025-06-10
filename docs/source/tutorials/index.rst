@@ -48,6 +48,5 @@ If you encounter any issues while following these tutorials:
 
 - Check the troubleshooting sections in each tutorial
 - Visit our `GitHub Issues <https://github.com/mouradboutrid/-TurboGuard/issues>`_
-- Refer to the :doc:`../api/index` for detailed API documentation
 
 Let's get started! 🎯
