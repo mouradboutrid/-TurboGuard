@@ -117,7 +117,7 @@ Setting up and maintaining development environments:
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/your-org/turboguard.git
+   git clone https://github.com/mouradboutrid/turboguard.git
    cd turboguard
 
    # Create virtual environment
