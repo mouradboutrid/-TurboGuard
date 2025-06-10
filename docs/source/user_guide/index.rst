@@ -128,31 +128,6 @@ Common issues and solutions:
 - **Memory and computational considerations**
 - **Deployment and scaling guidance**
 
-Quick Start Example
--------------------
-
-.. code-block:: python
-
-   from turboguard import TurboGuard, Config
-
-   # Initialize with configuration
-   config = Config.from_file('config/default.yaml')
-   tg = TurboGuard(config)
-
-   # Load and preprocess data
-   data = tg.load_data('path/to/cmapss/data')
-   processed_data = tg.preprocess(data)
-
-   # Train models
-   forecasting_model = tg.train_forecasting_model(processed_data)
-   anomaly_model = tg.train_anomaly_model(processed_data)
-
-   # Detect anomalies and forecast
-   anomalies = tg.detect_anomalies(test_data)
-   rul_predictions = tg.forecast_rul(test_data)
-
-   # Visualize results
-   tg.create_dashboard(anomalies, rul_predictions)
 
 Advanced Features
 -----------------
