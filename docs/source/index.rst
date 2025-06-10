@@ -241,12 +241,13 @@ Dataset Summary
 Authors
 -------
 
+
 **Boutrid Mourad**  
 *AI Engineering Student*  
 📧 muurad.boutrid@gmail.com  
-🔗 LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>_
+🔗 `LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
 
 **Kassimi Achraf**  
 *AI Engineering Student*  
 📧 ac.kassimi@edu.umi.ac.ma  
-🔗 LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>_
+🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
