@@ -304,7 +304,8 @@ Step 5: Build Forecasting LSTM
    print("🚀 Starting Forecasting LSTM training...")
    
    forecast_history = forecaster.train(
-       X_forecast, y_forecast,
+       X_train, y_train,
+       X_val, y_val
        epochs=30,
        batch_size=32,
        validation_split=0.2
