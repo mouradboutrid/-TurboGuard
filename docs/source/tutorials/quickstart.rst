@@ -85,10 +85,10 @@ Let's run a quick analysis using the Python interface:
 
 .. code-block:: python
 
-   from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
+   from src.LSTM_AutoEncoder.data_loader import DataLoader
    
    # Initialize data loader
-   loader = CMAPSSDataLoader()
+   loader = DataLoader()
    
    # Load FD001 dataset (single fault mode, single operating condition)
    train_data, test_data = loader.load_dataset('FD001')
