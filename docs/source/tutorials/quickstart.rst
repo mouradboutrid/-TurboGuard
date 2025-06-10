@@ -19,7 +19,7 @@ Navigate to: http://localhost:8501
 
 **Step 3: Explore!**
 
-You should see the TurboGuard dashboard loading with sample data.
+You should see the TurboGuard dashboard loading.
 
 Dashboard Overview
 ------------------
@@ -28,19 +28,16 @@ The TurboGuard dashboard provides an intuitive interface for turbofan engine hea
 
 📊 **Main Sections**
 
-- **Data Overview**: Explore the CMAPSS dataset
-- **Model Training**: Train LSTM AutoEncoder and Forecasting models  
-- **Anomaly Detection**: Real-time anomaly detection and visualization
-- **Health Monitoring**: Engine health metrics and RUL predictions
+- **Data upload**: To upload the enginedataset
+- **Configuration**: To chose whish model to work with
 - **Settings**: Configure model parameters and thresholds
 
 🎯 **Key Features**
 
 - Interactive sensor data visualization  
 - Real-time anomaly alerts
-- Remaining Useful Life (RUL) predictions
 - Model performance metrics
-- Customizable detection thresholds
+- Customizable detection thresholds (dynamic thresholds coming in the next version)
 
 First Exploration
 -----------------
@@ -51,7 +48,7 @@ Let's explore the dashboard step by step:
 
 .. code-block:: python
 
-   # The dashboard automatically loads sample data
+   # wheen you upload your dataset
    # You'll see:
    # - 21 sensor channels from turbofan engines
    # - Multiple engine units with different operating conditions
@@ -66,7 +63,7 @@ Let's explore the dashboard step by step:
 
 The dashboard provides pre-configured model settings:
 
-- **LSTM AutoEncoder**: 50 timesteps, 64 hidden units
+- **LSTM AutoEncoder**: 50 timesteps, multiple hidden units
 - **Forecasting LSTM**: Multi-step ahead prediction
 - **Training Parameters**: Adjustable epochs, batch size, learning rate
 
@@ -130,38 +127,6 @@ Let's run a quick analysis using the Python interface:
    
    plt.tight_layout()
    plt.show()
-
-Train Your First Model
-----------------------
-
-**Quick AutoEncoder Training**
-
-.. code-block:: python
-
-   from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
-   
-   # Initialize model
-   model = LSTMAutoEncoder(
-       sequence_length=50,
-       n_features=21,
-       encoding_dim=64
-   )
-   
-   # Build model architecture
-   model.build_model(input_shape=(50, 21))
-   
-   # Prepare training data
-   X_train = loader.create_sequences(train_data, sequence_length=50)
-   
-   # Train model (quick training)
-   history = model.train(
-       X_train, 
-       epochs=10,  # Use more epochs for better results
-       batch_size=32,
-       validation_split=0.2
-   )
-   
-   print("✅ Model training completed!")
 
 **Quick Anomaly Detection**
 
@@ -304,7 +269,6 @@ Tips for Success
 🎯 **Key Metrics to Watch**
 
 - Reconstruction error trends
-- RUL prediction accuracy  
 - False positive rates
 - Early warning performance
 
