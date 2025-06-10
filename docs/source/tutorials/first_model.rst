@@ -259,8 +259,8 @@ Step 5: Build Forecasting LSTM
    
    # Initialize forecasting model
    forecaster = PrognosticLSTMModel(
-       sequence_length=SEQUENCE_LENGTH,
-       n_features=N_FEATURES
+       n_features=N_FEATURES,
+       sequence_length=SEQUENCE_LENGTH
    )
    
    # Build model
@@ -273,15 +273,30 @@ Step 5: Build Forecasting LSTM
 
 .. code-block:: python
 
-   # Create input-output pairs for forecasting
-   X_forecast, y_forecast = loader.create_forecast_sequences(
-       train_normalized,
-       input_length=SEQUENCE_LENGTH,
-       forecast_horizon=10
-   )
-   
-   print(f"Forecasting input shape: {X_forecast.shape}")
-   print(f"Forecasting target shape: {y_forecast.shape}")
+   # Initialize your data processor and load normalized data
+processor = DataProcessor()
+df = processor.load_cmapss_data('/path/to/FD001.txt')
+
+# Extract sensor columns and operational mode as numpy arrays
+sensor_cols = [col for col in df.columns if col.startswith('sensor_')]
+data = df[sensor_cols].values
+modes = df['op_mode'].values
+
+# Parameters
+SEQUENCE_LENGTH = 30
+
+# Create sequences with modes using your model method
+model = PrognosticLSTMModel(n_features=data.shape[1], sequence_length=SEQUENCE_LENGTH)
+X, y, mode_seq = model.create_sequences(data, modes=modes)
+
+print(f"Input shape: {X.shape}")
+print(f"Target shape: {y.shape}")
+print(f"Mode sequence shape: {mode_seq.shape}")
+
+# Split train/val (example: 80% train)
+split_idx = int(0.8 * len(X))
+X_train, y_train, modes_train = X[:split_idx], y[:split_idx], mode_seq[:split_idx]
+X_val, y_val, modes_val = X[split_idx:], y[split_idx:], mode_seq[split_idx:])
 
 **Train Forecasting Model**
 
@@ -289,14 +304,17 @@ Step 5: Build Forecasting LSTM
 
    print("🚀 Starting Forecasting LSTM training...")
    
-   forecast_history = forecaster.train(
-       X_forecast, y_forecast,
+   model.build_model()
+   history = model.train(
+       X_train, y_train,
+       X_val, y_val,
        epochs=30,
        batch_size=32,
-       validation_split=0.2
-   )
-   
-   print("✅ Forecasting LSTM training completed!")
+       modes_train=modes_train,
+       modes_val=modes_val
+       )
+
+print("Training completed!")
 
 
 Step 6: Model Evaluation
