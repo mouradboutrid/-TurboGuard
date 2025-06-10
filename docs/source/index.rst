@@ -1,3 +1,4 @@
+```rst
 TurboGuard Documentation
 ========================
 
@@ -48,6 +49,29 @@ Uses LSTM reconstruction errors, forecasting deviations, and statistical also dy
 
 📈 **Detailed Evaluation Metrics**  
 Includes MSE, MAE, RMSE, F1-score, precision-recall, and anomaly lead-time.
+
+Architecture Overview
+--------------------
+
+TurboGuard follows a modular architecture designed for scalability and maintainability. The following diagrams illustrate the system's structure and workflows:
+
+System Activity Flow
+~~~~~~~~~~~~~~~~~~~
+
+.. raw:: html
+   :file: _static/diagrams/actvDiagram.html
+
+Component Interactions
+~~~~~~~~~~~~~~~~~~~~~
+
+.. raw:: html
+   :file: _static/diagrams/seqDiagram.html
+
+Use Cases
+~~~~~~~~~
+
+.. raw:: html
+   :file: _static/diagrams/usecaseDiagram.html
 
 Quick Start
 -----------
@@ -241,7 +265,6 @@ Dataset Summary
 Authors
 -------
 
-
 **Boutrid Mourad**  
 *AI Engineering Student*  
 📧 muurad.boutrid@gmail.com  
@@ -251,3 +274,4 @@ Authors
 *AI Engineering Student*  
 📧 ac.kassimi@edu.umi.ac.ma  
 🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
+```
