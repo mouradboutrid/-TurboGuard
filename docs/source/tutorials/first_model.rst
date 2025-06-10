@@ -615,7 +615,7 @@ Resources
 
 📚 **Further Reading**
 - :doc:`../user_guide/index` - Detailed user guide
-- :doc:`../api/index` - Complete API reference  
+- :doc:`../api/index` - Complete reference  
 - :doc:`../examples/index` - More examples and use cases
 
 🛠️ **Tools and Extensions**
