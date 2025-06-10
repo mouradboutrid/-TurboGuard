@@ -238,39 +238,15 @@ Dataset Summary
 
 **Sensors**: 21 channels including fan speed, core speed, various temperatures and pressures, fuel flow, and vibration.
 
-System Architecture Diagrams
-----------------------------
-
-Diagram 1
-~~~~~~~~~
-
-.. raw:: html
-
-    <iframe src="_static/diagrams/diagram1.html" width="100%" height="600px"></iframe>
-
-Diagram 2
-~~~~~~~~~
-
-.. raw:: html
-
-    <iframe src="_static/diagrams/diagram2.html" width="100%" height="600px"></iframe>
-
-Diagram 3
-~~~~~~~~~
-
-.. raw:: html
-
-    <iframe src="_static/diagrams/diagram3.html" width="100%" height="600px"></iframe>
-
 Authors
 -------
 
 **Boutrid Mourad**  
 *AI Engineering Student*  
 📧 muurad.boutrid@gmail.com  
-🔗 `LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
+🔗 LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>_
 
 **Kassimi Achraf**  
 *AI Engineering Student*  
 📧 ac.kassimi@edu.umi.ac.ma  
-🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
+🔗 LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>_
