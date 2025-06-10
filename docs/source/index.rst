@@ -185,8 +185,92 @@ Follow our comprehensive tutorial series to master TurboGuard:
    about/changelog
    about/license
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Additional Resources
+Performance Metrics
+-------------------
 
-   diagrams
+AutoEncoder Model
+~~~~~~~~~~~~~~~~~
+
+- **Reconstruction Error**: MSE < 0.15 on validation data
+- **Detection F1-Score**: > 0.52
+- **False Positives**: < 20% in nominal operating ranges
+
+Forecasting Model
+~~~~~~~~~~~~~~~~~
+
+- **RUL Prediction Accuracy**: RMSE < 15 cycles
+- **Early Warning**: > 60% anomalies flagged at least 20 cycles pre-failure
+- **Long-Horizon Forecasting**: Maintains performance for up to 50 steps
+
+Dataset Summary
+---------------
+
+**NASA CMAPSS Dataset** (Commercial Modular Aero-Propulsion System Simulation)
+
+.. list-table::
+   :header-rows: 1
+
+   * - Subset
+     - Fault Modes
+     - Operating Conditions
+     - Training Units
+     - Test Units
+   * - FD001
+     - 1
+     - 1
+     - 100
+     - 100
+   * - FD002
+     - 1
+     - 6
+     - 260
+     - 259
+   * - FD003
+     - 2
+     - 1
+     - 100
+     - 100
+   * - FD004
+     - 2
+     - 6
+     - 248
+     - 249
+
+**Sensors**: 21 channels including fan speed, core speed, various temperatures and pressures, fuel flow, and vibration.
+
+System Architecture Diagrams
+----------------------------
+
+Diagram 1
+~~~~~~~~~
+
+.. raw:: html
+
+    <iframe src="_static/diagrams/diagram1.html" width="100%" height="600px"></iframe>
+
+Diagram 2
+~~~~~~~~~
+
+.. raw:: html
+
+    <iframe src="_static/diagrams/diagram2.html" width="100%" height="600px"></iframe>
+
+Diagram 3
+~~~~~~~~~
+
+.. raw:: html
+
+    <iframe src="_static/diagrams/diagram3.html" width="100%" height="600px"></iframe>
+
+Authors
+-------
+
+**Boutrid Mourad**  
+*AI Engineering Student*  
+📧 muurad.boutrid@gmail.com  
+🔗 `LinkedIn <https://www.linkedin.com/in/mourad-boutrid-981659336>`_
+
+**Kassimi Achraf**  
+*AI Engineering Student*  
+📧 ac.kassimi@edu.umi.ac.ma  
+🔗 `LinkedIn <https://www.linkedin.com/in/achraf-kassimi-605418285>`_
