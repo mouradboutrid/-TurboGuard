@@ -25,10 +25,10 @@ Step 1: Data Preparation
    import numpy as np
    import pandas as pd
    import matplotlib.pyplot as plt
-   from src.LSTM_AutoEncoder.data_loader import CMAPSSDataLoader
+   from src.LSTM_AutoEncoder.data_loader import DataLoader
    
    # Initialize data loader
-   loader = CMAPSSDataLoader()
+   loader = DataLoader()
    
    # Load FD001 dataset
    train_data, test_data = loader.load_dataset('FD001')
@@ -87,17 +87,9 @@ Step 2: Build LSTM AutoEncoder
 
    from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoEncoder
    
-   # Model parameters
-   SEQUENCE_LENGTH = 50
-   N_FEATURES = 21  # Number of sensors
-   ENCODING_DIM = 64
    
    # Initialize AutoEncoder
-   autoencoder = LSTMAutoEncoder(
-       sequence_length=SEQUENCE_LENGTH,
-       n_features=N_FEATURES,
-       encoding_dim=ENCODING_DIM
-   )
+   autoencoder = LSTMAutoEncoder()
    
    # Build model architecture
    autoencoder.build_model(input_shape=(SEQUENCE_LENGTH, N_FEATURES))
@@ -160,7 +152,7 @@ Step 3: Train the AutoEncoder
        epochs=EPOCHS,
        batch_size=BATCH_SIZE,
        validation_split=VALIDATION_SPLIT,
-       verbose=1
+       verbose=0
    )
    
    print("✅ AutoEncoder training completed!")
@@ -263,13 +255,12 @@ Step 5: Build Forecasting LSTM
 
 .. code-block:: python
 
-   from src.Forecasting_LSTM.forecasting_lstm import ForecastingLSTM
+   from src.Forecasting_LSTM.forecasting_lstm import PrognosticLSTMModel
    
    # Initialize forecasting model
-   forecaster = ForecastingLSTM(
+   forecaster = PrognosticLSTMModel(
        sequence_length=SEQUENCE_LENGTH,
-       n_features=N_FEATURES,
-       forecast_horizon=10  # Predict 10 steps ahead
+       n_features=N_FEATURES
    )
    
    # Build model
@@ -307,69 +298,8 @@ Step 5: Build Forecasting LSTM
    
    print("✅ Forecasting LSTM training completed!")
 
-Step 6: RUL Prediction
-----------------------
 
-**Calculate Remaining Useful Life**
-
-.. code-block:: python
-
-   # Load RUL ground truth for test data
-   rul_truth = loader.load_rul_labels('FD001')
-   
-   # Predict RUL using forecasting deviations
-   predicted_rul = []
-   
-   for i in range(len(X_test)):
-       # Get forecast for current sequence
-       forecast = forecaster.model.predict(X_test[i:i+1])
-       
-       # Calculate prediction deviation (simplified RUL estimation)
-       deviation = np.mean(np.abs(forecast - X_test[i:i+1, -10:, :]))
-       
-       # Convert deviation to RUL estimate (this is a simplified approach)
-       rul_estimate = max(0, 150 - deviation * 1000)  # Scale appropriately
-       predicted_rul.append(rul_estimate)
-   
-   predicted_rul = np.array(predicted_rul)
-
-**Evaluate RUL Predictions**
-
-.. code-block:: python
-
-   from sklearn.metrics import mean_squared_error, mean_absolute_error
-   
-   # Calculate metrics
-   rmse = np.sqrt(mean_squared_error(rul_truth, predicted_rul))
-   mae = mean_absolute_error(rul_truth, predicted_rul)
-   
-   print(f"RUL Prediction Performance:")
-   print(f"RMSE: {rmse:.2f} cycles")
-   print(f"MAE: {mae:.2f} cycles")
-   
-   # Visualize RUL predictions
-   plt.figure(figsize=(12, 6))
-   
-   plt.subplot(1, 2, 1)
-   plt.scatter(rul_truth, predicted_rul, alpha=0.6)
-   plt.plot([0, max(rul_truth)], [0, max(rul_truth)], 'r--', label='Perfect Prediction')
-   plt.xlabel('True RUL')
-   plt.ylabel('Predicted RUL')
-   plt.title('RUL Prediction Scatter Plot')
-   plt.legend()
-   
-   plt.subplot(1, 2, 2)
-   plt.plot(rul_truth, label='True RUL', alpha=0.7)
-   plt.plot(predicted_rul, label='Predicted RUL', alpha=0.7)
-   plt.xlabel('Engine Index')
-   plt.ylabel('RUL (cycles)')
-   plt.title('RUL Prediction Comparison')
-   plt.legend()
-   
-   plt.tight_layout()
-   plt.show()
-
-Step 7: Model Evaluation
+Step 6: Model Evaluation
 ------------------------
 
 **Comprehensive Performance Metrics**
@@ -432,7 +362,7 @@ Step 7: Model Evaluation
            else:
                print(f"  ├── {metric_name}: {value}")
 
-Step 8: Save Your Models
+Step 7: Save Your Models
 ------------------------
 
 **Save Trained Models**
@@ -500,7 +430,7 @@ Step 8: Save Your Models
    
    print(f"✅ Configuration saved to: {config_path}")
 
-Step 9: Test Model Loading
+Step 8: Test Model Loading
 --------------------------
 
 **Load and Test Saved Models**
@@ -532,84 +462,8 @@ Step 9: Test Model Loading
    test_forecast = loaded_forecaster.predict(test_sample)
    print(f"Test forecast shape: {test_forecast.shape}")
 
-Step 10: Create Prediction Pipeline
------------------------------------
 
-**Build Complete Prediction Function**
-
-.. code-block:: python
-
-   def predict_anomaly_and_rul(data, models_path, config_path):
-       """
-       Complete prediction pipeline for new data
-       
-       Args:
-           data: Raw sensor data (pandas DataFrame)
-           models_path: Dictionary with paths to saved models
-           config_path: Path to model configuration
-       
-       Returns:
-           dict: Anomaly predictions and RUL estimates
-       """
-       
-       # Load configuration
-       with open(config_path, 'r') as f:
-           config = json.load(f)
-       
-       # Load models
-       autoencoder = load_model(models_path['autoencoder'])
-       forecaster = load_model(models_path['forecaster'])
-       
-       with open(models_path['preprocessor'], 'rb') as f:
-           preprocessor = pickle.load(f)
-       
-       # Preprocess data
-       normalized_data = preprocessor.transform(data)
-       
-       # Create sequences
-       sequences = loader.create_sequences(
-           normalized_data, 
-           sequence_length=config['autoencoder']['sequence_length']
-       )
-       
-       # Anomaly detection
-       reconstructions = autoencoder.predict(sequences)
-       reconstruction_errors = np.mean(np.square(sequences - reconstructions), axis=(1, 2))
-       
-       threshold = config['autoencoder']['threshold']
-       anomalies = reconstruction_errors > threshold
-       
-       # RUL prediction (simplified)
-       forecasts = forecaster.predict(sequences)
-       forecast_deviations = np.mean(np.abs(forecasts - sequences[:, -10:, :]), axis=(1, 2))
-       rul_estimates = np.maximum(0, 150 - forecast_deviations * 1000)
-       
-       return {
-           'anomalies': anomalies,
-           'reconstruction_errors': reconstruction_errors,
-           'rul_estimates': rul_estimates,
-           'threshold': threshold
-       }
-   
-   # Test the pipeline
-   models_path = {
-       'autoencoder': autoencoder_path,
-       'forecaster': forecaster_path,
-       'preprocessor': preprocessor_path
-   }
-   
-   # Test with sample data
-   sample_results = predict_anomaly_and_rul(
-       test_data.head(1000), 
-       models_path, 
-       config_path
-   )
-   
-   print("Pipeline Test Results:")
-   print(f"Anomalies detected: {sample_results['anomalies'].sum()}")
-   print(f"Average RUL estimate: {sample_results['rul_estimates'].mean():.2f}")
-
-Step 11: Visualization Dashboard
+Step 9: Visualization Dashboard
 --------------------------------
 
 **Create Summary Visualization**
@@ -702,7 +556,6 @@ You've successfully built your first complete TurboGuard model! Here's what you 
 ✅ **Forecasting LSTM**  
 - Built forecasting model
 - Trained for multi-step prediction
-- Implemented RUL estimation
 
 ✅ **Model Evaluation**
 - Comprehensive performance metrics
@@ -753,8 +606,6 @@ Troubleshooting
 **Issue**: Poor anomaly detection performance  
 **Solution**: Adjust threshold, try different sequence lengths, or add more training data
 
-**Issue**: RUL predictions are unrealistic
-**Solution**: Improve RUL calculation logic, use domain knowledge for scaling
 
 **Issue**: Memory errors during training
 **Solution**: Reduce batch size, use gradient accumulation, or train on smaller sequences
