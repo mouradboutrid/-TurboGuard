@@ -8,8 +8,7 @@ In this tutorial, you'll build and train your first complete TurboGuard model fo
 
 By the end of this tutorial, you'll have:
 
-- ✅ A trained LSTM AutoEncoder for anomaly detection
-- ✅ A Forecasting LSTM for RUL prediction  
+- ✅ A trained LSTM AutoEncoder for anomaly detection 
 - ✅ A complete evaluation pipeline
 - ✅ Visualization of results
 
