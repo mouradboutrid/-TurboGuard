@@ -33,12 +33,10 @@ Architecture
 
 Detailed overview of the TurboGuard codebase structure and design principles:
 
-- **System Architecture**: High-level component interactions and data flow
+- **System Architecture**: good-level component interactions and data flow
 - **Module Organization**: Core packages, utilities, and extension points
 - **Design Patterns**: Architectural decisions and rationale behind key implementations
-- **Data Pipelines**: Processing workflows from raw data to model outputs
 - **Plugin System**: Extension mechanisms for custom models and algorithms
-- **API Design**: RESTful endpoints and SDK architecture
 
 Coding Standards
 ----------------
@@ -83,7 +81,6 @@ Documentation standards and maintenance procedures:
 
 - **Documentation Types**: User guides, API references, tutorials, and examples
 - **Sphinx Configuration**: RST formatting, theme customization, and build processes
-- **Auto-generated Docs**: API documentation from docstrings and code annotations
 - **Version Management**: Documentation versioning and legacy support
 - **Contribution Guidelines**: How to write, review, and maintain documentation
 - **Accessibility Standards**: Ensuring documentation is accessible to all users
