@@ -15,7 +15,6 @@ Welcome to the User Guide for TurboGuard, your comprehensive toolkit for time se
    forecasting
    visualization
    configuration
-   api_reference
    troubleshooting
 
 Overview
@@ -23,14 +22,12 @@ Overview
 
 TurboGuard is designed to provide a complete solution for turbofan engine health monitoring and predictive maintenance:
 
-- **Comprehensive data preprocessing** for CMAPSS and custom turbofan datasets
-- **Advanced feature engineering** with automated feature selection and domain-specific transformations
-- **Multiple model architectures** including LSTM, CNN-LSTM, Transformer, and Autoencoder networks
+- **Comprehensive data preprocessing** for turbofan data
+- **Advanced feature engineering** with automated feature selection 
+- **Multiple model architectures** including LSTM, and Autoencoder networks
 - **Dual-mode anomaly detection** using both forecasting residuals and reconstruction errors
-- **Real-time forecasting capabilities** for remaining useful life (RUL) prediction
 - **Interactive visualization suite** with dashboards, heatmaps, and diagnostic plots
 - **Flexible configuration system** supporting multiple deployment scenarios
-- **Production-ready API** for integration with existing monitoring systems
 
 Getting Started
 ---------------
@@ -58,8 +55,6 @@ Comprehensive data handling workflows covering:
 - CMAPSS dataset loading and validation
 - Custom data format adapters
 - Data quality assessment and cleaning
-- Missing value imputation strategies
-- Outlier detection and treatment
 
 Feature Engineering
 ~~~~~~~~~~~~~~~~~~~
@@ -77,31 +72,27 @@ Model Training
 
 Detailed training workflows for multiple architectures:
 
-- **Forecasting Models**: LSTM, CNN-LSTM, Transformer networks for RUL prediction
+- **Forecasting Model**: LSTM
 - **Autoencoder Models**: Various architectures for reconstruction-based anomaly detection
-- **Hybrid Models**: Combined forecasting and reconstruction approaches
-- Training optimization, hyperparameter tuning, and validation strategies
+- Training optimization, hyperparameter tuning, and validation strategies (next version of the project)
 
 Anomaly Detection
 ~~~~~~~~~~~~~~~~~
 
 Multi-layered anomaly detection system:
 
-- **Threshold-based detection** using statistical methods
+- **Threshold-based detection** using statistical methods (also a dynamical but not integrate in the application yet)
 - **Forecasting residual analysis** for prediction-based anomalies
 - **Reconstruction error analysis** for pattern-based anomalies
-- **Ensemble methods** combining multiple detection approaches
 - **Adaptive thresholding** for evolving operational conditions
 
 Forecasting
 ~~~~~~~~~~~
 
-Real-time prediction capabilities:
+Prediction capabilities:
 
-- Remaining Useful Life (RUL) forecasting
 - Multi-horizon predictions
 - Uncertainty quantification
-- Model confidence intervals
 - Prediction performance monitoring
 
 Visualization
@@ -109,10 +100,9 @@ Visualization
 
 Rich visualization ecosystem:
 
-- **Interactive dashboards** for real-time monitoring
+- **Interactive dashboards** for data monitoring
 - **Anomaly heatmaps** for temporal pattern analysis
 - **Model performance plots** including training curves and validation metrics
-- **Engine health trajectories** with confidence bands
 - **Feature importance visualizations**
 - **Comparative analysis tools** for multiple engines or time periods
 
@@ -125,19 +115,7 @@ Flexible configuration management:
 - **Environment-specific settings** (development, staging, production)
 - **Model configuration templates** for common use cases
 - **Logging and monitoring configuration**
-- **API deployment settings**
 
-API Reference
-~~~~~~~~~~~~~
-
-Complete documentation for programmatic access:
-
-- **Core API classes** and methods
-- **Data pipeline interfaces**
-- **Model training and inference APIs**
-- **Visualization function reference**
-- **Configuration utilities**
-- **Example code snippets** and integration patterns
 
 Troubleshooting
 ~~~~~~~~~~~~~~~
@@ -185,21 +163,11 @@ Advanced Features
 - **A/B testing framework** for model comparison
 - **Integration hooks** for external monitoring systems
 
-Performance Considerations
---------------------------
-
-TurboGuard is optimized for both research and production use:
-
-- **Scalable preprocessing** for large datasets
-- **GPU acceleration** support for model training
-- **Memory-efficient** streaming data processing
-- **Parallel processing** capabilities
-- **Production deployment** patterns and best practices
 
 Support & Community
 -------------------
 
-- **Documentation**: Comprehensive guides and API documentation
+- **Documentation**: Comprehensive guides and documentation
 - **Examples**: Jupyter notebooks with real-world use cases  
 - **GitHub Issues**: Bug reports and feature requests
 - **Community Forum**: Discussion and user support
