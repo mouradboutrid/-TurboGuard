@@ -73,6 +73,7 @@ TurboGuard/
 ├── data/                                 # CMAPSS Dataset Files
 │   ├── RUL_FD00X.txt                     # Remaining Useful Life labels
 │   ├── test_FD00X.txt                    # Test dataset
+│   ├── cmpass++.png                      #sonsors infos
 │   ├── train_FD00X.txt                   # Training dataset
 │   └── readme.txt                        # Dataset documentation
 ├── data_overview/                        # Data exploration
