@@ -94,7 +94,7 @@ The example scripts are organized as follows:
     src/
     ├── LSTM_Autoencoder/
     ├── Forecasting_LSTM/         
-    │   autoencoder_anomaly_predictor_test    # LSTM Autoencoder analysis
+    ├── autoencoder_anomaly_predictor_test    # LSTM Autoencoder analysis
     ├── forecaster_anomaly_predictor_test.py  # Advanced forecasting analysis
     └── data/
         ├── train_FD001.txt               # Training data samples
@@ -140,8 +140,8 @@ To run the advanced forecasting-based anomaly detection:
 
 .. code-block:: python
 
-    # In main() function
-    model_path = 'path/to/your/saved_model.h5'
+    # In main() function 
+    model_path = 'path/to/your/saved_model.h5' 
     config_path = 'path/to/your/config.json'  
     test_data_path = 'path/to/test_data.txt'
     threshold_percentile = 95  # Anomaly detection threshold
