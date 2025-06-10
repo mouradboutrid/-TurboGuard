@@ -65,15 +65,15 @@ def demo_full_comparison():
     return analyzer, results
 
 
-if __name__ == "__main__":
-    # Example usage
-    print("Anomaly Detection Framework")
-    print("=====================================")
 
-    # Option 1: Analyze single dataset
-    #print("\n1. Single Dataset Analysis:")
-    #analyzer, results = demo_single_dataset_analysis()
+# Example usage
+print("Anomaly Detection Framework")
+print("=====================================")
 
-    # Option 2: Full comparison (uncomment to use - takes longer)
-    print("\n3. Full Dataset Comparison:")
-    analyzer, results = demo_full_comparison()
+# Option 1: Analyze single dataset
+#print("\n1. Single Dataset Analysis:")
+#analyzer, results = demo_single_dataset_analysis()
+
+# Option 2: Full comparison (uncomment to use - takes longer)
+print("\n3. Full Dataset Comparison:")
+analyzer, results = demo_full_comparison()
