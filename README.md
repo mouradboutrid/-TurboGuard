@@ -158,10 +158,10 @@ streamlit run app/app.py
 
 #### 3. Programmatic Usage
 ```python
-from data_loader import DataLoader
-from data_preprocessor import DataPreprocessor
-from lstm_autoencoder import LSTMAutoencoder
-from anomaly_detector import AnomalyDetector
+from src.LSTM_AutoEncoder.data_loader import DataLoader
+from src.LSTM_AutoEncoder.data_preprocessor import DataPreprocessor
+from src.LSTM_AutoEncoder.lstm_autoencoder import LSTMAutoencoder
+from src.LSTM_AutoEncoder.anomaly_detector import AnomalyDetector
 
 # Load dataset (returns a dict with keys 'train', 'test', 'rul')
 loader = DataLoader(data_dir='/content/drive/MyDrive/CMAPSSData')
