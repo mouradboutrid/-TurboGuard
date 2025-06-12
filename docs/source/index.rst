@@ -193,12 +193,11 @@ AutoEncoder Model
 
 - **Reconstruction Error**: MSE < 0.15 on validation data
 - **Detection F1-Score**: > 0.52
-- **False Positives**: < 20% in nominal operating ranges
 
 Forecasting Model
 ~~~~~~~~~~~~~~~~~
 
-- **RUL Prediction Accuracy**: RMSE < 15 cycles
+- **Forecasting mse**: MSE < 0.15 on validation data
 - **Early Warning**: > 60% anomalies flagged at least 20 cycles pre-failure
 - **Long-Horizon Forecasting**: Maintains performance for up to 50 steps
 
