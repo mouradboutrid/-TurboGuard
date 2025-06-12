@@ -2,9 +2,8 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-
 class DataPreprocessorApp:
-    """Preprocess data with model configuration matching"""
+    """Preprocess CMAPSS data with model configuration matching"""
 
     def __init__(self, model_config=None):
         if model_config:
