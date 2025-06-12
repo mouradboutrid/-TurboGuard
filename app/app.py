@@ -15,29 +15,29 @@ from autoencoder_anomaly_detector_app import AutoencoderAnomalyDetector
 
 MODEL_PATHS = {
     'forecasting': {
-        'model': "saved_models/lstm_model_20250529_005930.h5",
-        'config': "saved_models/analysis_config_20250529_005930.json"
+        'model': "trained_models/forecaster_model/saved_models/lstm_model_20250529_005930.h5",
+        'config': "trained_models/forecaster_model/config/analysis_config_20250529_005930.json"
     },
     'autoencoder': {
         'FD001': {
-            'autoencoder': "models/FD001/autoencoder.keras",
-            'encoder': "models/FD001/encoder.keras",
-            'config': "models/FD001/config.json"
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD001/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD001/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD001/config.json"
         },
         'FD002': {
-            'autoencoder': "models/FD002/autoencoder.keras",
-            'encoder': "models/FD002/encoder.keras",
-            'config': "models/FD002/config.json"
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD002/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD002/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD002/config.json"
         },
         'FD003': {
-            'autoencoder': "models/FD003/autoencoder.keras",
-            'encoder': "models/FD003/encoder.keras",
-            'config': "models/FD003/config.json"
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD003/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD003/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD003/config.json"
         },
         'FD004': {
-            'autoencoder': "models/FD004/autoencoder.keras",
-            'encoder': "models/FD004/encoder.keras",
-            'config': "models/FD004/config.json"
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD004/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD004/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD004/config.json"
         }
     }
 }
