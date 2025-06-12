@@ -5,6 +5,36 @@ import pywt
 from tensorflow.keras.models import load_model
 from scipy.stats import zscore
 
+
+MODEL_PATHS = {
+    'forecasting': {
+        'model': "trained_models/forecaster_model/saved_models/lstm_model_20250529_005930.h5",
+        'config': "trained_models/forecaster_model/config/analysis_config_20250529_005930.json"
+    },
+    'autoencoder': {
+        'FD001': {
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD001/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD001/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD001/config.json"
+        },
+        'FD002': {
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD002/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD002/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD002/config.json"
+        },
+        'FD003': {
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD003/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD003/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD003/config.json"
+        },
+        'FD004': {
+            'autoencoder': "trained_models/trained_models/autoencoder_models/FD004/autoencoder.keras",
+            'encoder': "trained_models/trained_models/autoencoder_models/FD004/encoder.keras",
+            'config': "trained_models/trained_models/autoencoder_models/FD004/config.json"
+        }
+    }
+}
+
 class AutoencoderAnomalyDetector:
     """Pre-trained anomaly detector using autoencoder models"""
 
