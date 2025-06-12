@@ -8,9 +8,8 @@ from sklearn.cluster import KMeans
 from tensorflow.keras.models import load_model
 import streamlit as st
 
-
 class AnomalyPredictorApp:
-    """Anomaly detection using saved forecasting model"""
+    """Enhanced class for anomaly detection using saved CMAPSS forecasting model"""
 
     def __init__(self):
         self.model_path = MODEL_PATHS['forecasting']['model']
@@ -47,13 +46,13 @@ class AnomalyPredictorApp:
                     'mean_absolute_error': tf.keras.metrics.MeanAbsoluteError()
                 }
                 self.model = load_model(self.model_path, custom_objects=custom_objects)
-                st.success("LSTM Forecasting Model loaded successfully!")
+                st.success("✅ LSTM Forecasting Model loaded successfully!")
 
             except Exception as e1:
                 try:
                     self.model = load_model(self.model_path, compile=False)
                     self.model.compile(optimizer='adam', loss='mse', metrics=['mae', 'mse'])
-                    st.success("LSTM Forecasting Model loaded successfully (recompiled)!")
+                    st.success("✅ LSTM Forecasting Model loaded successfully (recompiled)!")
                 except Exception as e2:
                     st.error(f"Failed to load LSTM Forecasting Model: {e2}")
                     return False
@@ -172,9 +171,9 @@ class AnomalyPredictorApp:
                 unit_analysis[unit_id] = {
                     'total_sequences': 0,
                     'anomalies': 0,
-                    'anomaly_positions': [],
                     'anomaly_rate': 0.0,
-                    'risk_level': 'Low'
+                    'risk_level': 'Low',
+                    'anomaly_positions': []  # Fixed: Initialize anomaly_positions list
                 }
 
             unit_analysis[unit_id]['total_sequences'] += 1
@@ -188,7 +187,7 @@ class AnomalyPredictorApp:
             rate = (anomalies / total) * 100 if total > 0 else 0
             unit_analysis[unit_id]['anomaly_rate'] = rate
 
-            # Risk classification
+            # Enhanced risk classification
             if rate >= 75:
                 unit_analysis[unit_id]['risk_level'] = 'Critical'
             elif rate >= 50:
