@@ -7,7 +7,7 @@ class DataLoader:
 
     @staticmethod
     def load_dataset(dataset_name, data_path=None):
-        """Load dataset by name (FD001, FD002, FD003, FD004)"""
+        """Load CMAPSS dataset by name (FD001, FD002, FD003, FD004)"""
         sensor_columns = [f'sensor_{i}' for i in range(1, 22)]
         operational_columns = ['op_setting_1', 'op_setting_2', 'op_setting_3']
         columns = ['unit_id', 'time_cycle'] + operational_columns + sensor_columns
