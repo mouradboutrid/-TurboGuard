@@ -11,7 +11,7 @@ from plotly.subplots import make_subplots
 from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_absolute_error
 from app.forecaster_anomaly_predictor_app import AnomalyPredictorApp   
-from app.autoencoder_anomaly_detector_app import AutoencoderAnomalyPredictor
+from app.autoencoder_anomaly_detector_app import AutoencoderAnomalyDetector
 
 MODEL_PATHS = {
     'forecasting': {
@@ -69,467 +69,490 @@ def create_enhanced_sensor_plot(data, selected_units, selected_sensors, anomaly_
 
                 # Normal data line
                 fig.add_trace(go.Scatter(
-                    x=unit_data['time_cycle'],
-                    y=unit_data[sensor],
-                    name=f"Unit {unit_id}",
+                    x=unit_data['time_cycle'],y=unit_data[sensor],
+                    mode='lines',
+                    name=f'Unit {unit_id}',
                     line=dict(color=colors[i % len(colors)], width=2),
-                    opacity=0.8,
-                    hovertemplate=f"<b>Unit {unit_id} - {sensor}</b><br>" +
-                                "Cycle: %{x}<br>" +
-                                "Value: %{y:.4f}<extra></extra>",
-                    showlegend=(j == 0)), row=j+1, col=1)
+                    showlegend=(j == 0),  # Only show legend for first subplot
+                    legendgroup=f'unit_{unit_id}'
+                ), row=j+1, col=1)
 
                 # Add anomaly points if available
-                if anomaly_data and unit_id in anomaly_data:
-                    anomaly_positions = anomaly_data[unit_id].get('anomaly_positions', [])
-                    if anomaly_positions:
-                        anomaly_cycles = [pos for pos in anomaly_positions if pos in unit_data['time_cycle'].values]
+                if anomaly_data is not None and 'unit_ids' in anomaly_data and 'sequence_indices' in anomaly_data:
+                    unit_anomaly_mask = anomaly_data['unit_ids'] == unit_id
+                    if np.any(unit_anomaly_mask):
+                        anomaly_indices = anomaly_data['sequence_indices'][unit_anomaly_mask]
+                        anomaly_cycles = []
+                        anomaly_values = []
+
+                        for idx in anomaly_indices:
+                            if idx < len(unit_data):
+                                cycle_val = unit_data.iloc[idx]['time_cycle'] if idx < len(unit_data) else None
+                                sensor_val = unit_data.iloc[idx][sensor] if idx < len(unit_data) and sensor in unit_data.columns else None
+                                if cycle_val is not None and sensor_val is not None:
+                                    anomaly_cycles.append(cycle_val)
+                                    anomaly_values.append(sensor_val)
+
                         if anomaly_cycles:
-                            anomaly_values = unit_data[unit_data['time_cycle'].isin(anomaly_cycles)][sensor]
                             fig.add_trace(go.Scatter(
                                 x=anomaly_cycles,
                                 y=anomaly_values,
                                 mode='markers',
-                                name=f"Unit {unit_id} Anomalies",
+                                name=f'Anomalies Unit {unit_id}',
                                 marker=dict(
                                     color='red',
                                     size=8,
                                     symbol='x',
                                     line=dict(width=2, color='darkred')
                                 ),
-                                hovertemplate=f"<b>ANOMALY - Unit {unit_id}</b><br>" +
-                                            "Cycle: %{x}<br>" +
-                                            "Value: %{y:.4f}<extra></extra>",
-                                showlegend=(j == 0)
+                                showlegend=(j == 0),
+                                legendgroup=f'anomaly_{unit_id}'
                             ), row=j+1, col=1)
 
         fig.update_layout(
             height=300 * len(selected_sensors),
-            title="Sensor Data with Anomalies",
+            title_text="Sensor Data Analysis with Anomaly Detection",
             showlegend=True,
-            hovermode='closest'
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            )
         )
 
-        fig.update_xaxes(title_text="Time Cycle")
-        fig.update_yaxes(title_text="Normalized Value")
+        for j in range(len(selected_sensors)):
+            fig.update_xaxes(title_text="Time Cycle", row=j+1, col=1)
+            fig.update_yaxes(title_text="Sensor Value", row=j+1, col=1)
 
-    elif plot_type == "heatmap":
+    else:  # Heatmap
         # Create correlation heatmap
-        correlation_data = []
-        for unit_id in selected_units:
-            unit_data = filtered_data[filtered_data['unit_id'] == unit_id]
-            if not unit_data.empty:
-                unit_corr = unit_data[selected_sensors].corr()
-                correlation_data.append(unit_corr.values)
+        sensor_data = filtered_data[selected_sensors]
+        correlation_matrix = sensor_data.corr()
 
-        if correlation_data:
-            avg_corr = np.mean(correlation_data, axis=0)
-            fig = go.Figure(data=go.Heatmap(
-                z=avg_corr,
-                x=selected_sensors,
-                y=selected_sensors,
-                colorscale='RdBu',
-                zmid=0,
-                text=np.round(avg_corr, 3),
-                texttemplate="%{text}",
-                textfont={"size": 10},
-                hovertemplate="<b>%{y} vs %{x}</b><br>Correlation: %{z:.3f}<extra></extra>"
-            ))
-            fig.update_layout(
-                title="Sensor Correlation Heatmap",
-                height=600,
-                width=800
-            )
+        fig = go.Figure(data=go.Heatmap(
+            z=correlation_matrix.values,
+            x=correlation_matrix.columns,
+            y=correlation_matrix.index,
+            colorscale='RdBu',
+            zmid=0,
+            text=np.round(correlation_matrix.values, 2),
+            texttemplate="%{text}",
+            textfont={"size": 10},
+            hoverongaps=False
+        ))
+
+        fig.update_layout(
+            title="Sensor Correlation Heatmap",
+            xaxis_title="Sensors",
+            yaxis_title="Sensors",
+            height=600
+        )
 
     return fig
 
-def create_anomaly_summary_chart(unit_analysis):
-    """Create summary charts for anomaly analysis"""
+
+def create_anomaly_summary_plots(unit_analysis, model_type="Model"):
+    """Create summary plots for anomaly analysis"""
     if not unit_analysis:
         return None, None
 
-    # Risk level distribution
-    risk_counts = {}
-    anomaly_rates = []
-    unit_ids = []
+    # Prepare data
+    units = list(unit_analysis.keys())
+    anomaly_rates = [unit_analysis[unit]['anomaly_rate'] for unit in units]
+    risk_levels = [unit_analysis[unit]['risk_level'] for unit in units]
+    total_sequences = [unit_analysis[unit]['total_sequences'] for unit in units]
+    anomaly_counts = [unit_analysis[unit]['anomalies'] for unit in units]
 
-    for unit_id, analysis in unit_analysis.items():
-        risk_level = analysis['risk_level']
-        risk_counts[risk_level] = risk_counts.get(risk_level, 0) + 1
-        anomaly_rates.append(analysis['anomaly_rate'])
-        unit_ids.append(unit_id)
+    # Color mapping for risk levels
+    risk_colors = {
+        'Low': 'green',
+        'Medium': 'orange',
+        'High': 'red',
+        'Critical': 'darkred'
+    }
 
-    # Risk distribution pie chart
-    fig1 = go.Figure(data=[go.Pie(
-        labels=list(risk_counts.keys()),
-        values=list(risk_counts.values()),
-        hole=.3,
-        marker_colors=['green', 'yellow', 'orange', 'red']
-    )])
+    # Plot 1: Anomaly Rate by Unit
+    fig1 = go.Figure()
+
+    for risk in ['Low', 'Medium', 'High', 'Critical']:
+        mask = [r == risk for r in risk_levels]
+        if any(mask):
+            fig1.add_trace(go.Bar(
+                x=[units[i] for i in range(len(units)) if mask[i]],
+                y=[anomaly_rates[i] for i in range(len(anomaly_rates)) if mask[i]],
+                name=f'{risk} Risk',
+                marker_color=risk_colors[risk],
+                text=[f'{anomaly_rates[i]:.1f}%' for i in range(len(anomaly_rates)) if mask[i]],
+                textposition='auto'
+            ))
+
     fig1.update_layout(
-        title="Risk Level Distribution",
-        height=400
+        title=f'{model_type} - Anomaly Rate by Unit',
+        xaxis_title='Unit ID',
+        yaxis_title='Anomaly Rate (%)',
+        barmode='group',
+        height=500,
+        showlegend=True
     )
 
-    # Anomaly rate bar chart
-    colors = ['red' if rate >= 75 else 'orange' if rate >= 50 else 'yellow' if rate >= 25 else 'green'
-              for rate in anomaly_rates]
+    # Plot 2: Risk Level Distribution
+    risk_counts = {}
+    for risk in risk_levels:
+        risk_counts[risk] = risk_counts.get(risk, 0) + 1
 
-    fig2 = go.Figure(data=[go.Bar(
-        x=[f"Unit {uid}" for uid in unit_ids],
-        y=anomaly_rates,
-        marker_color=colors,
-        hovertemplate="<b>%{x}</b><br>Anomaly Rate: %{y:.1f}%<extra></extra>"
-    )])
+    fig2 = go.Figure(data=[
+        go.Pie(
+            labels=list(risk_counts.keys()),
+            values=list(risk_counts.values()),
+            marker_colors=[risk_colors[risk] for risk in risk_counts.keys()],
+            textinfo='label+percent+value',
+            texttemplate='%{label}<br>%{value} units<br>(%{percent})',
+            hovertemplate='<b>%{label}</b><br>Units: %{value}<br>Percentage: %{percent}<extra></extra>'
+        )
+    ])
+
     fig2.update_layout(
-        title="Anomaly Rate by Unit",
-        xaxis_title="Unit ID",
-        yaxis_title="Anomaly Rate (%)",
-        height=400
+        title=f'{model_type} - Risk Level Distribution',
+        height=400,
+        showlegend=True
     )
 
     return fig1, fig2
 
-def create_method_comparison_chart(anomaly_results):
-    """Create comparison chart for different detection methods"""
-    if not anomaly_results:
-        return None
 
-    methods_data = []
-    for method, result in anomaly_results.items():
-        if method != 'ensemble' and 'anomalies' in result:
-            anomaly_count = np.sum(result['anomalies'])
-            methods_data.append({
-                'Method': method.title(),
-                'Anomalies Detected': anomaly_count,
-                'Detection Rate': (anomaly_count / len(result['anomalies'])) * 100
-            })
+def display_detailed_results(results, model_name):
+    """Display detailed analysis results"""
+    st.subheader(f"📊 {model_name} - Detailed Analysis Results")
 
-    if methods_data:
-        df_methods = pd.DataFrame(methods_data)
+    if not results:
+        st.error("No results to display")
+        return
 
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
-            name='Anomalies Detected',
-            x=df_methods['Method'],
-            y=df_methods['Anomalies Detected'],
-            yaxis='y',
-            offsetgroup=1,
-            marker_color='lightblue'
-        ))
-        fig.add_trace(go.Bar(
-            name='Detection Rate (%)',
-            x=df_methods['Method'],
-            y=df_methods['Detection Rate'],
-            yaxis='y2',
-            offsetgroup=2,
-            marker_color='orange'
-        ))
+    # Basic Statistics
+    col1, col2, col3, col4 = st.columns(4)
 
-        fig.update_layout(
-            title='Detection Methods Comparison',
-            xaxis_title='Detection Method',
-            yaxis=dict(title='Number of Anomalies', side='left'),
-            yaxis2=dict(title='Detection Rate (%)', side='right', overlaying='y'),
-            legend=dict(x=0.7, y=1),
-            height=400
-        )
-        return fig
+    total_sequences = len(results.get('unit_ids', []))
+    total_anomalies = np.sum(results['anomaly_results']['ensemble']['anomalies']) if 'ensemble' in results['anomaly_results'] else 0
+    anomaly_rate = (total_anomalies / total_sequences * 100) if total_sequences > 0 else 0
+    total_units = len(results['unit_analysis'])
 
-    return None
+    with col1:
+        st.metric("Total Sequences", total_sequences)
+    with col2:
+        st.metric("Total Anomalies", total_anomalies)
+    with col3:
+        st.metric("Overall Anomaly Rate", f"{anomaly_rate:.2f}%")
+    with col4:
+        st.metric("Units Analyzed", total_units)
 
-# ===== STREAMLIT APP =====
+    # Unit Analysis Table
+    if results['unit_analysis']:
+        st.subheader("🏭 Unit-wise Analysis")
+
+        unit_df = pd.DataFrame.from_dict(results['unit_analysis'], orient='index')
+        unit_df.index.name = 'Unit ID'
+        unit_df = unit_df.reset_index()
+
+        # Style the dataframe
+        def color_risk_level(val):
+            colors = {
+                'Low': 'background-color: #d4edda; color: #155724',
+                'Medium': 'background-color: #fff3cd; color: #856404',
+                'High': 'background-color: #f8d7da; color: #721c24',
+                'Critical': 'background-color: #721c24; color: white'
+            }
+            return colors.get(val, '')
+
+        styled_df = unit_df.style.applymap(color_risk_level, subset=['risk_level'])
+        st.dataframe(styled_df, use_container_width=True)
+
+    # Method-specific results
+    if 'anomaly_results' in results:
+        st.subheader("🔍 Detection Method Results")
+
+        method_cols = st.columns(len(results['anomaly_results']))
+
+        for i, (method, method_results) in enumerate(results['anomaly_results'].items()):
+            with method_cols[i]:
+                st.write(f"**{method.title()}**")
+                if 'anomalies' in method_results:
+                    method_anomalies = np.sum(method_results['anomalies'])
+                    method_rate = (method_anomalies / total_sequences * 100) if total_sequences > 0 else 0
+                    st.metric(f"{method.title()} Anomalies", method_anomalies)
+                    st.write(f"Rate: {method_rate:.2f}%")
+
+                    if 'threshold' in method_results and method_results['threshold'] is not None:
+                        st.write(f"Threshold: {method_results['threshold']:.4f}")
+
+
+
+
+# Main Streamlit App
+def convert_keys_to_builtin_types(obj):
+    if isinstance(obj, dict):
+        return {
+            (int(k) if isinstance(k, np.integer) else str(k) if not isinstance(k, (str, int, float, bool, type(None))) else k):
+            convert_keys_to_builtin_types(v)
+            for k, v in obj.items()
+        }
+    elif isinstance(obj, list):
+        return [convert_keys_to_builtin_types(item) for item in obj]
+    else:
+        return obj
+
 def main():
     st.set_page_config(
         page_title="TurboGuard",
-        page_icon="🛬",
+        page_icon="✈",
         layout="wide",
         initial_sidebar_state="expanded"
     )
 
-    st.title("✈️TurboGuard: AI-Powered Health Monitoring & Anomaly Detection")
+    st.title("🛫 TurboGuard: Intelligent Predictive Maintenance Solution for Turbofan Engines")
     st.markdown("---")
 
     # Sidebar for model selection
     st.sidebar.header("🎛️ Configuration")
 
+    # Model Selection
     model_choice = st.sidebar.selectbox(
-        "Select Analysis Model:",
+        "Select Model Type",
         ["LSTM Forecasting Model", "Autoencoder Ensemble Model"],
-        help="Choose between pre-trained LSTM forecasting or autoencoder ensemble models"
+        help="Choose between pre-trained LSTM forecasting or the autoencoder model"
     )
 
-    # Model-specific configurations
-    if model_choice == "LSTM Forecasting Model":
-        st.sidebar.subheader("LSTM Model Settings")
-        threshold_percentile = st.sidebar.slider(
-            "Anomaly Threshold Percentile",
-            min_value=75, max_value=99, value=99, step=1,
-            help="Higher values = fewer anomalies detected"
-        )
-        predictor = AnomalyPredictorApp()
-
-    else:  # Autoencoder Ensemble Model
-        st.sidebar.subheader("Autoencoder Mode Settings")
+    # Dataset selection for autoencoder
+    if model_choice == "Autoencoder Ensemble Model":
         dataset_choice = st.sidebar.selectbox(
-            "Select Dataset Model:",
+            "Select Dataset",
             ["FD001", "FD002", "FD003", "FD004"],
-            help="Choose which model to use : Depending to whish Operation Mode !!!!!"
+            help="Choose which operation mode to use for autoencoder analysis"
         )
+    else:
+        dataset_choice = None
 
-        detection_methods = st.sidebar.multiselect(
-            "Detection Methods:",
-            ["autoencoder"
-             #"statistical", "wavelet" : for this virsion of the app we wont use this to aprochs
-             ],
-            default=["autoencoder"],
-            help="Select anomaly detection methods to use in ensemble"
-        )
-
-        threshold_percentile = st.sidebar.slider(
-            "Anomaly Threshold Percentile",
-            min_value=80, max_value=99, value=95, step=1
-        )
-
-        analyzer = AutoencoderAnomalyAnalyzer(dataset_choice)
-
-    # File upload
-    st.header("📁 Data Upload")
-    uploaded_file = st.file_uploader(
-        "Upload your engine Dataset",
-        type=['txt', 'csv'],
-        help="Upload your CMAPSS test dataset file"
+    # File Upload
+    st.sidebar.subheader("📁 Data Upload")
+    uploaded_file = st.sidebar.file_uploader(
+        "Upload Test Data (CSV/TXT)",
+        type=['csv', 'txt'],
+        help="Upload data file"
     )
 
+    # Analysis Parameters
+    st.sidebar.subheader("⚙️ Analysis Parameters")
+    threshold_percentile = st.sidebar.slider(
+        "Anomaly Threshold Percentile",
+        min_value=80,
+        max_value=99,
+        value=95,
+        help="Percentile threshold for anomaly detection"
+    )
+
+    if model_choice == "Autoencoder Ensemble Model":
+        detection_methods = st.sidebar.multiselect(
+            "Detection Methods",
+            ["autoencoder"], #we will add the statistical methods in the next version
+            default=["autoencoder"],
+            help="Select which detection methods to use in ensemble"
+        )
+    else:
+        detection_methods = None
+
+    # Initialize session state
+    if 'analysis_results' not in st.session_state:
+        st.session_state.analysis_results = None
+    if 'current_model' not in st.session_state:
+        st.session_state.current_model = None
+
+    # Main Analysis Section
     if uploaded_file is not None:
         # Save uploaded file temporarily
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.txt') as tmp_file:
-            tmp_file.write(uploaded_file.getvalue())
-            tmp_file_path = tmp_file.name
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp_file:
+            tmp_file.write(uploaded_file.read())
+            tmp_filepath = tmp_file.name
 
-        try:
-            # Load and analyze based on selected model
-            if model_choice == "LSTM Forecasting Model":
-                st.header("🤖 LSTM Forecasting Model Analysis")
+        col1, col2 = st.columns([2, 1])
 
-                with st.spinner("Loading LSTM model..."):
-                    if predictor.load_model_and_config():
-                        with st.spinner("Analyzing data for anomalies..."):
-                            results = predictor.predict_and_analyze(tmp_file_path, threshold_percentile)
+        with col1:
+            st.info(f"📁 File uploaded: {uploaded_file.name}")
+            st.info(f"🤖 Selected Model: {model_choice}")
+            if dataset_choice:
+                st.info(f"📊 Dataset: {dataset_choice}")
 
+        with col2:
+            analyze_button = st.button("🚀 Start Analysis", type="primary", use_container_width=True)
+
+        if analyze_button:
+            with st.spinner(f"Analyzing with {model_choice}..."):
+                try:
+                    if model_choice == "LSTM Forecasting Model":
+                        # Initialize and run LSTM model
+                        predictor = AnomalyPredictorApp()
+
+                        if predictor.load_model_and_config():
+                            results = predictor.predict_and_analyze(tmp_filepath, threshold_percentile)
                             if results:
-                                st.success("✅ Analysis completed successfully!")
-                                display_results(results)
+                                st.session_state.analysis_results = results
+                                st.session_state.current_model = model_choice
+                                st.success("✅ LSTM Analysis completed successfully!")
                             else:
-                                st.error("❌ Analysis failed. Please check your data format.")
-                    else:
-                        st.error("❌ Failed to load LSTM model. Please check model files.")
+                                st.error("❌ LSTM Analysis failed")
 
-            else:  # Autoencoder Ensemble Model
-                st.header("🧠 Autoencoder Ensemble Model Analysis")
+                    else:  # Autoencoder Ensemble Model
+                        # Initialize and run autoencoder model
+                        analyzer = AutoencoderAnomalyAnalyzer(dataset_choice)
 
-                with st.spinner(f"Loading autoencoder models for {dataset_choice}..."):
-                    if analyzer.load_models():
-                        with st.spinner("Analyzing data for anomalies..."):
+                        if analyzer.load_models():
                             results = analyzer.predict_and_analyze(
-                                tmp_file_path,
+                                tmp_filepath,
                                 methods=detection_methods,
                                 threshold_percentile=threshold_percentile
                             )
-
                             if results:
-                                st.success("✅ Analysis completed successfully!")
-                                display_results(results, detection_methods)
+                                st.session_state.analysis_results = results
+                                st.session_state.current_model = model_choice
+                                st.success("✅ Autoencoder Analysis completed successfully!")
                             else:
-                                st.error("❌ Analysis failed. Please check your data format.")
-                    else:
-                        st.error(f"❌ Failed to load autoencoder models for {dataset_choice}.")
+                                st.error("❌ Autoencoder Analysis failed")
 
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
-        finally:
-            # Clean up temporary file
-            if os.path.exists(tmp_file_path):
-                os.unlink(tmp_file_path)
+                except Exception as e:
+                    st.error(f"❌ Analysis failed: {str(e)}")
+                    st.error("Please check your model files and data format")
 
-    else:
-        st.info("👆 Please upload a CMAPSS dataset file to begin analysis.")
+        # Clean up temporary file
+        try:
+            os.unlink(tmp_filepath)
+        except:
+            pass
 
-        # Show model information
-        if model_choice == "LSTM Forecasting Model":
-            st.subheader("📊 LSTM Forecasting Model Info")
-            st.write("""
-            This model uses LSTM neural networks to forecast sensor values and detect anomalies
-            based on prediction errors. It's trained on CMAPSS data and can identify:
-            - Unusual sensor behavior patterns
-            - Deviations from expected operational conditions
-            - Multi-variate anomaly detection
-            """)
+    # Display Results
+    if st.session_state.analysis_results is not None:
+        results = st.session_state.analysis_results
+        model_name = st.session_state.current_model
 
-        else:
-            st.subheader("🔍 Autoencoder Ensemble Model Info")
-            st.write(f"""
-            This model uses pre-trained autoencoders for {dataset_choice} dataset with ensemble detection:
-            - **Autoencoder**: Reconstruction error-based detection
-            """)
+        st.markdown("---")
+        st.header("📈 Analysis Results")
 
-def display_results(results, detection_methods=None):
-    """Display analysis results with enhanced visualizations"""
-    anomaly_results = results['anomaly_results']
-    unit_analysis = results['unit_analysis']
-    test_data = results['test_data']
-    model_type = results['model_type']
+        # Display detailed results
+        display_detailed_results(results, model_name)
 
-    # Summary metrics
-    st.subheader("📊 Analysis Summary")
+        # Create and display summary plots
+        if results['unit_analysis']:
+            st.markdown("---")
+            st.subheader("📊 Summary Visualizations")
 
-    col1, col2, col3, col4 = st.columns(4)
+            fig1, fig2 = create_anomaly_summary_plots(results['unit_analysis'], model_name)
 
-    total_units = len(unit_analysis)
-    total_sequences = sum(ua['total_sequences'] for ua in unit_analysis.values())
-    total_anomalies = sum(ua['anomalies'] for ua in unit_analysis.values())
-    avg_anomaly_rate = np.mean([ua['anomaly_rate'] for ua in unit_analysis.values()])
+            if fig1 and fig2:
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.plotly_chart(fig1, use_container_width=True)
+                with col2:
+                    st.plotly_chart(fig2, use_container_width=True)
 
-    col1.metric("Total Units", total_units)
-    col2.metric("Total Sequences", total_sequences)
-    col3.metric("Total Anomalies", total_anomalies)
-    col4.metric("Avg Anomaly Rate", f"{avg_anomaly_rate:.1f}%")
+        # Sensor Analysis Section
+        if 'test_data' in results and not results['test_data'].empty:
+            st.markdown("---")
+            st.subheader("🔍 Sensor Data Analysis")
 
-    # Risk level summary
-    risk_levels = [ua['risk_level'] for ua in unit_analysis.values()]
-    risk_counts = {level: risk_levels.count(level) for level in ['Low', 'Medium', 'High', 'Critical']}
+            # Sensor plot controls
+            sensor_cols = [col for col in results['test_data'].columns if col.startswith('sensor_')]
+            available_units = sorted(results['test_data']['unit_id'].unique())
 
-    st.subheader("⚠️ Risk Assessment")
-    risk_col1, risk_col2, risk_col3, risk_col4 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
 
-    risk_col1.metric("🟢 Low Risk", risk_counts.get('Low', 0))
-    risk_col2.metric("🟡 Medium Risk", risk_counts.get('Medium', 0))
-    risk_col3.metric("🟠 High Risk", risk_counts.get('High', 0))
-    risk_col4.metric("🔴 Critical Risk", risk_counts.get('Critical', 0))
+            with col1:
+                selected_units = st.multiselect(
+                    "Select Units to Analyze",
+                    available_units,
+                    default=available_units[:5] if len(available_units) > 5 else available_units,
+                    help="Choose which units to display in the sensor plots"
+                )
 
-    # Method comparison for ensemble models
-    if detection_methods and len(detection_methods) > 1:
-        st.subheader("🔍 Detection Methods Comparison")
-        method_fig = create_method_comparison_chart(anomaly_results)
-        if method_fig:
-            st.plotly_chart(method_fig, use_container_width=True)
+            with col2:
+                selected_sensors = st.multiselect(
+                    "Select Sensors",
+                    sensor_cols,
+                    default=sensor_cols[:3] if len(sensor_cols) > 3 else sensor_cols,
+                    help="Choose which sensors to analyze"
+                )
 
-    # Anomaly summary charts
-    st.subheader("📈 Anomaly Analysis Charts")
-
-    chart_col1, chart_col2 = st.columns(2)
-
-    with chart_col1:
-        risk_fig, _ = create_anomaly_summary_chart(unit_analysis)
-        if risk_fig:
-            st.plotly_chart(risk_fig, use_container_width=True)
-
-    with chart_col2:
-        _, anomaly_fig = create_anomaly_summary_chart(unit_analysis)
-        if anomaly_fig:
-            st.plotly_chart(anomaly_fig, use_container_width=True)
-
-    # Detailed unit analysis
-    st.subheader("🔧 Detailed Unit Analysis")
-
-    # Unit selection for detailed view
-    high_risk_units = [uid for uid, ua in unit_analysis.items() if ua['risk_level'] in ['High', 'Critical']]
-    all_units = list(unit_analysis.keys())
-
-    default_units = high_risk_units[:5] if high_risk_units else all_units[:5]
-
-    selected_units = st.multiselect(
-        "Select units for detailed analysis:",
-        options=all_units,
-        default=default_units,
-        help="High-risk units are recommended for detailed analysis"
-    )
-
-    if selected_units:
-        # Sensor selection
-        sensor_columns = [col for col in test_data.columns if col.startswith('sensor_')]
-
-        selected_sensors = st.multiselect(
-            "Select sensors to visualize:",
-            options=sensor_columns,
-            default=sensor_columns[:4],
-            help="Select sensors to display in the detailed plots"
-        )
-
-        if selected_sensors:
-            # Plot type selection
-            plot_type = st.radio(
-                "Visualization Type:",
-                ["line", "heatmap"],
-                help="Line plot shows time series, heatmap shows correlations"
-            )
+            with col3:
+                plot_type = st.selectbox(
+                    "Plot Type",
+                    ["line", "heatmap"],
+                    help="Choose visualization type"
+                )
 
             # Create and display sensor plots
-            sensor_fig = create_enhanced_sensor_plot(
-                test_data, selected_units, selected_sensors,
-                unit_analysis, plot_type
+            if selected_units and selected_sensors:
+                sensor_fig = create_enhanced_sensor_plot(
+                    results['test_data'],
+                    selected_units,
+                    selected_sensors,
+                    results,
+                    plot_type
+                )
+
+                if sensor_fig:
+                    st.plotly_chart(sensor_fig, use_container_width=True)
+
+        # Download Results
+        st.markdown("---")
+        st.subheader("💾 Export Results")
+
+        if st.button("📥 Download Analysis Report", use_container_width=True):
+            # Create summary report
+            report_data = {
+                'model_type': model_name,
+                'analysis_timestamp': pd.Timestamp.now().isoformat(),
+                'total_sequences': len(results.get('unit_ids', [])),
+                'total_anomalies': int(np.sum(results['anomaly_results']['ensemble']['anomalies'])) if 'ensemble' in results['anomaly_results'] else 0,
+                'unit_analysis': results['unit_analysis']
+            }
+            report_data = convert_keys_to_builtin_types(report_data)
+            report_json = json.dumps(report_data, indent=2, default=str)
+
+            st.download_button(
+                label="📄 Download JSON Report",
+                data=report_json,
+                file_name=f"anomaly_analysis_report_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.json",
+                mime="application/json"
             )
 
-            if sensor_fig:
-                st.plotly_chart(sensor_fig, use_container_width=True)
+    else:
+        # Instructions when no analysis has been run
+        st.info("👆 Please upload a test data file and click 'Start Analysis' to begin.")
 
-    # Detailed results table
-    st.subheader("📋 Unit Analysis Table")
+        with st.expander("ℹ️ Instructions & Model Information"):
+            st.markdown("""
+            ### How to Use This Dashboard
 
-    # Convert unit analysis to DataFrame for better display
-    unit_df_data = []
-    for unit_id, analysis in unit_analysis.items():
-        unit_df_data.append({
-            'Unit ID': unit_id,
-            'Risk Level': analysis['risk_level'],
-            'Anomaly Rate (%)': f"{analysis['anomaly_rate']:.1f}",
-            'Total Sequences': analysis['total_sequences'],
-            'Anomalies': analysis['anomalies'],
-            'Anomaly Positions': str(analysis['anomaly_positions'][:5]) + ('...' if len(analysis['anomaly_positions']) > 5 else '')
-        })
+            1. **Select Model Type**: Choose between LSTM Forecasting or Autoencoder Ensemble models
+            2. **Upload Data**: Upload your CMAPSS test data file (CSV or TXT format)
+            3. **Configure Parameters**: Adjust threshold percentile and detection methods
+            4. **Run Analysis**: Click 'Start Analysis' to detect anomalies
+            5. **Review Results**: Examine the detailed results and visualizations
 
-    unit_df = pd.DataFrame(unit_df_data)
+            ### Model Information
 
-    # Sort by risk level and anomaly rate
-    risk_order = {'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1}
-    unit_df['Risk_Order'] = unit_df['Risk Level'].map(risk_order)
-    unit_df = unit_df.sort_values(['Risk_Order', 'Anomaly Rate (%)'], ascending=[False, False])
-    unit_df = unit_df.drop('Risk_Order', axis=1)
+            **LSTM Forecasting Model:**
+            - Uses pre-trained LSTM networks for time series forecasting
+            - Detects anomalies based on prediction errors
+            - Suitable for temporal pattern analysis
 
-    st.dataframe(unit_df, use_container_width=True)
+            **Autoencoder Ensemble Model:**
+            - Combines multiple detection methods (autoencoder, statistical, wavelet)
+            - Uses reconstruction error and statistical analysis
+            - Robust ensemble approach for anomaly detection
 
-    # Export results
-    st.subheader("💾 Export Results")
-
-    if st.button("📄 Generate Analysis Report"):
-        report_data = {
-            'model_type': model_type,
-            'analysis_summary': {
-                'total_units': total_units,
-                'total_sequences': total_sequences,
-                'total_anomalies': total_anomalies,
-                'average_anomaly_rate': avg_anomaly_rate
-            },
-            'risk_distribution': risk_counts,
-            'unit_analysis': unit_analysis
-        }
-
-        report_json = json.dumps(report_data, indent=2)
-        st.download_button(
-            label="📥 Download JSON Report",
-            data=report_json,
-            file_name=f"cmapss_analysis_report_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.json",
-            mime="application/json"
-        )
-
-        # CSV export
-        csv_buffer = io.StringIO()
-        unit_df.to_csv(csv_buffer, index=False)
-        st.download_button(
-            label="📊 Download CSV Report",
-            data=csv_buffer.getvalue(),
-            file_name=f"cmapss_unit_analysis_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv",
-            mime="text/csv"
-        )
+            ### Data Format
+            - CMAPSS dataset format with sensor readings
+            - Columns: unit_id, time_cycle, operational_settings, sensor_1 to sensor_21
+            - Space or comma separated values
+            """)
 
 main()
