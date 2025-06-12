@@ -5,35 +5,6 @@ import pywt
 from tensorflow.keras.models import load_model
 from scipy.stats import zscore
 
-MODEL_PATHS = {
-    'forecasting': {
-        'model': "/content/cmapss_analysis_results/saved_models/lstm_model_20250529_005930.h5",
-        'config': "/content/cmapss_analysis_results/config/analysis_config_20250529_005930.json"
-    },
-    'autoencoder': {
-        'FD001': {
-            'autoencoder': "/content/models/FD001/autoencoder.keras",
-            'encoder': "/content/models/FD001/encoder.keras",
-            'config': "/content/models/FD001/config.json"
-        },
-        'FD002': {
-            'autoencoder': "/content/models/FD002/autoencoder.keras",
-            'encoder': "/content/models/FD002/encoder.keras",
-            'config': "/content/models/FD002/config.json"
-        },
-        'FD003': {
-            'autoencoder': "/content/models/FD003/autoencoder.keras",
-            'encoder': "/content/models/FD003/encoder.keras",
-            'config': "/content/models/FD003/config.json"
-        },
-        'FD004': {
-            'autoencoder': "/content/models/FD004/autoencoder.keras",
-            'encoder': "/content/models/FD004/encoder.keras",
-            'config': "/content/models/FD004/config.json"
-        }
-    }
-}
-
 class AutoencoderAnomalyDetector:
     """Pre-trained anomaly detector using autoencoder models"""
 
@@ -75,7 +46,7 @@ class AutoencoderAnomalyDetector:
             self.thresholds['reconstruction'] = self.config.get('threshold', 0.1)
 
             if hasattr(self.autoencoder, 'input_shape'):
-                pass
+                expected_shape = self.autoencoder.input_shape
 
             st.success(f"✅ Autoencoder models loaded successfully for {self.dataset_name}!")
             return True
