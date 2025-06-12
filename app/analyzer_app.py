@@ -6,7 +6,6 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
 from sklearn.cluster import KMeans
 
-
 class AutoencoderAnomalyAnalyzer:
     """Main analyzer class for Model 2 with pre-trained models"""
 
@@ -30,7 +29,7 @@ class AutoencoderAnomalyAnalyzer:
     def load_and_preprocess(self, data_path=None):
         """Load and preprocess dataset"""
         if not self.preprocessor:
-            st.error("")
+            st.error("Models must be loaded first to get preprocessing configuration")
             return False
 
         self.data = DataLoader.load_dataset(self.dataset_name, data_path)
@@ -38,11 +37,10 @@ class AutoencoderAnomalyAnalyzer:
             self.data, sensor_columns = self.preprocessor.preprocess(self.data)
             self.sequences, self.unit_ids, self.sequence_indices = self.preprocessor.create_sequences(self.data, sensor_columns)
 
-            st.info(f"")
             return True
         return False
 
-    def detect_anomalies(self, methods=['autoencoder'], threshold_percentile=95):
+    def detect_anomalies(self, methods=['autoencoder', 'statistical', 'wavelet'], threshold_percentile=95):
         """Detect anomalies using specified methods"""
         if self.sequences is None:
             raise ValueError("No data loaded.")
@@ -65,9 +63,9 @@ class AutoencoderAnomalyAnalyzer:
                 unit_analysis[unit_id] = {
                     'total_sequences': 0,
                     'anomalies': 0,
-                    'anomaly_positions': [],
                     'anomaly_rate': 0.0,
-                    'risk_level': 'Low'
+                    'risk_level': 'Low',
+                    'anomaly_positions': []  # Fixed: Initialize anomaly_positions list
                 }
 
             unit_analysis[unit_id]['total_sequences'] += 1
