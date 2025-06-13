@@ -1,25 +1,17 @@
 # Core Machine Learning & Deep Learning
-tensorflow==2.11.0
+tensorflow==2.11.1
 keras>=2.11.0
 scikit-learn>=1.1.0
-
 # Data Manipulation
 numpy>=1.21.0
 pandas>=1.3.0
-
 # Visualization
 matplotlib>=3.4.0
 seaborn>=0.11.0
-
 # Streamlit Web Interface
 streamlit>=1.10.0
-
 # Utilities
 joblib>=1.1.0
-
 # Optional Enhancements
 tqdm>=4.64.0
 scipy>=1.7.0
-
-
-
