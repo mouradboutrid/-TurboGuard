@@ -7,7 +7,7 @@ from tensorflow.keras.models import load_model
 from sklearn.cluster import KMeans
 from autoencoder_anomaly_detector_app import AutoencoderAnomalyDetector
 from preprocessor_app import DataPreprocessorApp
-from data_loader import DataLoader
+from loader_app import DataLoader
 
 class AutoencoderAnomalyAnalyzer:
     """Main analyzer class for Model 2 with pre-trained models"""
