@@ -12,6 +12,7 @@ from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_absolute_error
 from forecaster_anomaly_predictor_app import AnomalyPredictorApp   
 from autoencoder_anomaly_detector_app import AutoencoderAnomalyDetector
+from analyzer_app import AutoencoderAnomalyAnalyzer
 
 MODEL_PATHS = {
     'forecasting': {
