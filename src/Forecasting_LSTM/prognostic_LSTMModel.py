@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 
 class PrognosticLSTMModel:
-    """Enhanced LSTM model with operational mode support"""
+    """LSTM model with operational mode support"""
 
     def __init__(self, n_features, sequence_length=30):
         self.n_features = n_features
@@ -16,7 +16,7 @@ class PrognosticLSTMModel:
         self.history = None
 
     def build_model(self, lstm_units=64, dropout_rate=0.3, learning_rate=0.001):
-        """Build mode-aware LSTM model"""
+        """Build LSTM model"""
         # Sensor data input
         sensor_input = Input(shape=(self.sequence_length, self.n_features), name='sensor_input')
         lstm1 = LSTM(lstm_units, return_sequences=True)(sensor_input)
@@ -45,7 +45,6 @@ class PrognosticLSTMModel:
         return self.model
 
     def create_sequences(self, data, modes=None):
-        """Create sequences with optional mode information"""
         sequences = []
         targets = []
         mode_seqs = [] if modes is not None else None
@@ -62,7 +61,7 @@ class PrognosticLSTMModel:
 
     def train(self, X_train, y_train, X_val=None, y_val=None, epochs=50, batch_size=32,
               modes_train=None, modes_val=None):
-        """Train with optional mode information"""
+        
         if self.model is None:
             self.build_model()
 
