@@ -46,8 +46,8 @@ Supports robust normalization, dynamic sequence generation, and feature selectio
 🚨 **Multiple Detection Strategies**  
 Uses LSTM reconstruction errors, forecasting deviations, and statistical also dynamical thresholds.
 
-📈 **Detailed Evaluation Metrics**  
-Includes MSE, MAE, RMSE, F1-score, precision-recall, and anomaly lead-time.
+📈 **Evaluation Metrics**  
+Includes MSE, MAE, RMSE
 
 Quick Start
 -----------
