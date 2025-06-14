@@ -250,7 +250,7 @@ def display_detailed_results(results, model_name):
 
     # Unit Analysis Table
     if results['unit_analysis']:
-        st.subheader("🏭 Unit-wise Analysis")
+        st.subheader("Unit-wise Analysis")
 
         unit_df = pd.DataFrame.from_dict(results['unit_analysis'], orient='index')
         unit_df.index.name = 'Unit ID'
@@ -315,7 +315,7 @@ def main():
     st.markdown("---")
 
     # Sidebar for model selection
-    st.sidebar.header("🎛️ Configuration")
+    st.sidebar.header("🎛Configuration")
 
     # Model Selection
     model_choice = st.sidebar.selectbox(
@@ -379,7 +379,7 @@ def main():
 
         with col1:
             st.info(f"📁 File uploaded: {uploaded_file.name}")
-            st.info(f"🤖 Selected Model: {model_choice}")
+            st.info(f"Selected Model: {model_choice}")
             if dataset_choice:
                 st.info(f"📊 Dataset: {dataset_choice}")
 
@@ -435,7 +435,7 @@ def main():
         model_name = st.session_state.current_model
 
         st.markdown("---")
-        st.header("📈 Analysis Results")
+        st.header("Analysis Results")
 
         # Display detailed results
         display_detailed_results(results, model_name)
@@ -503,7 +503,7 @@ def main():
 
         # Download Results
         st.markdown("---")
-        st.subheader("💾 Export Results")
+        st.subheader("Export Results")
 
         if st.button("📥 Download Analysis Report", use_container_width=True):
             # Create summary report
@@ -526,7 +526,7 @@ def main():
 
     else:
         # Instructions when no analysis has been run
-        st.info("👆 Please upload a test data file and click 'Start Analysis' to begin.")
+        st.info("Please upload a test data file and click 'Start Analysis' to begin.")
 
         with st.expander("ℹ️ Instructions & Model Information"):
             st.markdown("""
