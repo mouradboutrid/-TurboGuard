@@ -137,9 +137,9 @@ Follow our comprehensive tutorial series to master TurboGuard:
 - 📊 **Visualization Dashboard**: Generate comprehensive 6-panel performance dashboard
 
 **What You'll Achieve:**
-- ✅ Functional LSTM AutoEncoder with <0.15 MSE reconstruction error
-- ✅ Forecasting model with <15 cycles RUL prediction RMSE  
-- ✅ Complete anomaly detection pipeline with >50% F1-score
+- ✅ Functional LSTM AutoEncoder with <0.15 MAE reconstruction error
+- ✅ Forecasting model with <0.15 prediction MAE  
+- ✅ Complete anomaly detection pipeline
 - ✅ Production-ready model saving and loading system
 - ✅ Interactive visualization dashboard for real-time monitoring
 
