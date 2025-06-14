@@ -3,7 +3,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
 class DataProcessor:
-    """Enhanced data processor with operational mode clustering"""
+    """Data processor with operational mode clustering"""
 
     def __init__(self):
         self.sensor_columns = [f'sensor_{i}' for i in range(1, 22)]
