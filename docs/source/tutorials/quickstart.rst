@@ -196,14 +196,9 @@ After running the quick start, you should see:
 
    AutoEncoder Performance:
    ├── Reconstruction MSE: 0.142
-   ├── Detection F1-Score: 0.534
-   ├── Precision: 0.423
-   └── Recall: 0.721
 
    Forecasting Performance:
-   ├── RUL RMSE: 14.2 cycles
-   ├── Early Warning Rate: 67%
-   └── False Positive Rate: 18%
+   ├── MSE: 0.157
 
 **Visual Outputs**
 
@@ -252,9 +247,6 @@ Next Steps
 Now that you have TurboGuard running:
 
 1. 🎯 **Build your first complete model**: :doc:`first_model`
-2. 📚 **Learn data preprocessing**: :doc:`../user_guide/data_preprocessing`
-3. 🔧 **Explore advanced features**: :doc:`../examples/advanced_usage`
-4. 📖 **Check API reference**: :doc:`../api/index`
 
 Tips for Success
 ----------------
